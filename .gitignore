@@ -1,0 +1,7 @@
+Episodes/
+Audios/
+Personnages/
+*.mp4
+*.mp3
+*.pyc
+__pycache__/
