@@ -1,5 +1,6 @@
 import html
 import os
+import re
 import subprocess
 import unicodedata
 import urllib.parse
@@ -110,6 +111,7 @@ def load_story_html(filename: str) -> str:
             blocks.append("<hr>")
         else:
             escaped = html.escape(chunk).replace("\n", "<br>")
+            escaped = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
             blocks.append(f"<p>{escaped}</p>")
     return (
         '          <details class="story">\n'
@@ -117,6 +119,59 @@ def load_story_html(filename: str) -> str:
         f'            <div class="story-body">{"".join(blocks)}</div>\n'
         "          </details>"
     )
+
+
+def format_paragraphs_html(raw: str) -> str:
+    blocks = []
+    for chunk in raw.strip().split("\n\n"):
+        chunk = chunk.strip()
+        if not chunk:
+            continue
+        if chunk == "---":
+            blocks.append("<hr>")
+        elif chunk.startswith("### "):
+            blocks.append(f"<h4>{html.escape(chunk[4:])}</h4>")
+        else:
+            escaped = html.escape(chunk).replace("\n", "<br>")
+            escaped = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escaped)
+            blocks.append(f"<p>{escaped}</p>")
+    return "".join(blocks)
+
+
+def load_chronicles_html() -> str:
+    chron_dir = os.path.join(ROOT, "Chroniques")
+    if not os.path.isdir(chron_dir):
+        return ""
+    files = sorted(f for f in os.listdir(chron_dir) if f.lower().endswith(".txt"))
+    if not files:
+        return ""
+    cards = []
+    for fname in files:
+        with open(os.path.join(chron_dir, fname), encoding="utf-8") as fh:
+            lines = fh.read().strip().splitlines()
+        if not lines:
+            continue
+        heading = html.escape(lines[0].strip())
+        body = format_paragraphs_html("\n".join(lines[1:]))
+        cards.append(
+            f"""        <article class="card chronicle-card">
+          <h3>{heading}</h3>
+          <details class="story" open>
+            <summary>Lire le compte-rendu</summary>
+            <div class="story-body">{body}</div>
+          </details>
+        </article>"""
+        )
+    if not cards:
+        return ""
+    return f"""    <section id="chroniques">
+      <div class="section-head">
+        <h2>Chroniques des Parties</h2>
+      </div>
+      <div class="chronicles-list">
+{chr(10).join(cards)}
+      </div>
+    </section>"""
 
 
 def build_index(episodes: list[str], audios: list[str], characters: list[str]) -> None:
@@ -426,6 +481,21 @@ def build_index(episodes: list[str], audios: list[str], characters: list[str]) -
       margin: 0.75rem 0;
     }}
 
+    .story-body h4 {{
+      margin: 0.9rem 0 0.4rem;
+      font-size: 0.98rem;
+      color: var(--accent);
+    }}
+
+    .chronicles-list {{
+      display: grid;
+      gap: 1.15rem;
+    }}
+
+    .chronicle-card .story-body {{
+      max-height: none;
+    }}
+
     footer {{
       text-align: center;
       color: var(--muted);
@@ -451,9 +521,12 @@ def build_index(episodes: list[str], audios: list[str], characters: list[str]) -
           <a class="btn" href="#episodes">Épisodes Vidéo</a>
           <a class="btn" href="#audios">Audios</a>
           <a class="btn" href="#personnages">Personnages</a>
+          <a class="btn" href="#chroniques">Chroniques</a>
         </div>
       </div>
     </header>
+
+{load_chronicles_html()}
 
     <section id="episodes">
       <div class="section-head">
@@ -508,7 +581,7 @@ def git_push_if_repo() -> None:
     if not status.stdout.strip():
         print("Aucun changement Git à publier.")
         return
-    subprocess.run(["git", "-C", ROOT, "add", "index.html", "Affiche - Le Grimoire de l'Ombre.jpg", "sync_archive.py", "Lancer_Sync_Archive.bat", ".gitignore", "Histoires"], check=False)
+    subprocess.run(["git", "-C", ROOT, "add", "index.html", "Affiche - Le Grimoire de l'Ombre.jpg", "sync_archive.py", "Lancer_Sync_Archive.bat", ".gitignore", "Histoires", "Chroniques"], check=False)
     subprocess.run(["git", "-C", ROOT, "commit", "-m", "Mise a jour archive Le Grimoire de l'Ombre"], check=False)
     subprocess.run(["git", "-C", ROOT, "push"], check=False)
     print("Site web mis à jour sur GitHub Pages !")
