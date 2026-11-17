@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <title>Le Grimoire de l'Ombre — Archive JDR</title>
+  <title>Le Grimoire de l'Ombre — Portail JDR</title>
   <style>
     :root {
       --bg-light: #f5f1ea;
@@ -76,19 +76,19 @@
 
     .hero {
       display: grid;
-      grid-template-columns: 240px 1fr;
+      grid-template-columns: 220px 1fr;
       gap: 2rem;
       align-items: center;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 1.5rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.75rem;
     }
 
     @media (max-width: 680px) {
       .hero { grid-template-columns: 1fr; text-align: center; }
-      .hero img { max-width: 240px; margin: 0 auto; }
+      .hero img { max-width: 220px; margin: 0 auto; }
     }
 
     .hero img {
@@ -119,27 +119,56 @@
       .btn-row { justify-content: center; }
     }
 
-    .btn {
+    .btn, .btn-inline {
       display: inline-block;
-      padding: 0.55rem 1rem;
+      padding: 0.5rem 0.95rem;
       border-radius: 8px;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       border: 1px solid var(--border);
       color: var(--text);
       background: var(--bg);
+      cursor: pointer;
+      font-family: inherit;
     }
 
-    .btn.primary {
+    .btn.primary, .btn-inline.primary {
       background: var(--accent);
       color: var(--accent-text);
       border-color: transparent;
     }
 
-    .btn:hover { opacity: 0.88; }
+    .btn:hover, .btn-inline:hover { opacity: 0.88; }
 
-    section { margin-bottom: 2.75rem; }
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .tab-btn {
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .tab-btn[aria-selected="true"] {
+      background: var(--accent);
+      color: var(--accent-text);
+      border-color: transparent;
+    }
+
+    .tabpanel[hidden] { display: none; }
 
     .section-head {
       display: flex;
@@ -147,7 +176,7 @@
       align-items: baseline;
       flex-wrap: wrap;
       gap: 0.5rem;
-      margin-bottom: 1rem;
+      margin: 0 0 1rem;
       border-bottom: 1px solid var(--border);
       padding-bottom: 0.45rem;
     }
@@ -166,8 +195,9 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
       gap: 1.15rem;
+      margin-bottom: 2rem;
     }
 
     .card {
@@ -192,20 +222,42 @@
       font-size: 0.9rem;
     }
 
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--accent);
+      vertical-align: middle;
+      margin-left: 0.35rem;
+    }
+
     video, audio {
       width: 100%;
       border-radius: 8px;
       background: #000;
     }
 
-    audio {
-      background: transparent;
+    audio { background: transparent; }
+
+    .linked-audio {
+      border-top: 1px solid var(--border);
+      padding-top: 0.5rem;
+    }
+
+    .mini-label {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
     }
 
     .card-actions {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.65rem;
       flex-wrap: wrap;
+      align-items: center;
     }
 
     .card-actions a {
@@ -217,52 +269,100 @@
 
     .card-actions a:hover { text-decoration: underline; }
 
-    details.story {
+    .playlist-bar {
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.55rem 0.75rem;
-      background: var(--bg);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
     }
 
-    details.story summary {
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
+    .playlist-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .codex-group { margin-bottom: 1.75rem; }
+    .codex-group > h3 {
+      margin: 0 0 0.75rem;
       color: var(--accent);
+      font-size: 1.15rem;
     }
 
-    .story-body {
-      margin-top: 0.65rem;
-      max-height: 320px;
-      overflow-y: auto;
-      padding-right: 0.35rem;
-      font-size: 0.9rem;
-    }
-
-    .story-body p {
+    dialog:modal {
+      width: min(760px, 94vw);
+      max-height: 88vh;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 0;
+      background: var(--surface);
       color: var(--text);
-      margin: 0 0 0.65rem;
+      overscroll-behavior: contain;
     }
 
-    .story-body hr {
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(3px);
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+
+    .reader-head {
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 1.15rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      z-index: 2;
+    }
+
+    .reader-controls {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .reader-body {
+      padding: 1.5rem clamp(1rem, 4vw, 2.25rem) 2rem;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: var(--reader-size, 1.08rem);
+      line-height: 1.75;
+    }
+
+    .reader-body h4 {
+      color: var(--accent);
+      margin: 1.4rem 0 0.5rem;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .reader-body hr {
       border: 0;
       border-top: 1px solid var(--border);
-      margin: 0.75rem 0;
+      margin: 1.25rem 0;
     }
 
-    .story-body h4 {
-      margin: 0.9rem 0 0.4rem;
-      font-size: 0.98rem;
-      color: var(--accent);
-    }
-
-    .chronicles-list {
-      display: grid;
-      gap: 1.15rem;
-    }
-
-    .chronicle-card .story-body {
-      max-height: none;
+    .reader-foot {
+      position: sticky;
+      bottom: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 0.7rem 1.15rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     footer {
@@ -283,37 +383,42 @@
       <div>
         <h1>Le Grimoire de l'Ombre</h1>
         <p class="subtitle">
-          Portail officiel de notre campagne de Jeu de Rôle — vidéos des épisodes, récits audio et présentations des personnages, hébergés sur Internet Archive.
+          Portail officiel de notre campagne de Jeu de Rôle — chroniques, vidéos, audios, fiches personnages et codex.
         </p>
         <div class="btn-row">
-          <a class="btn primary" href="https://archive.org/details/@retromad/" target="_blank" rel="noopener">Profil Archive.org (@retromad)</a>
-          <a class="btn" href="#episodes">Épisodes Vidéo</a>
-          <a class="btn" href="#audios">Audios</a>
-          <a class="btn" href="#personnages">Personnages</a>
-          <a class="btn" href="#chroniques">Chroniques</a>
+          <button type="button" class="btn primary" id="openGrimoireBtn">Ouvrir la Liseuse (Grimoire)</button>
+          <a class="btn" href="https://archive.org/details/@retromad/" target="_blank" rel="noopener">Archive.org (@retromad)</a>
         </div>
       </div>
     </header>
 
-    <section id="chroniques">
+    <nav class="tabs" role="tablist" aria-label="Sections du portail">
+      <button class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-chroniques" id="tab-chroniques">Chroniques &amp; Épisodes</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-personnages" id="tab-personnages">Personnages</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-codex" id="tab-codex">Codex</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-audios" id="tab-audios">Playlist Audio</button>
+    </nav>
+
+    <section id="panel-chroniques" class="tabpanel" role="tabpanel" aria-labelledby="tab-chroniques">
       <div class="section-head">
         <h2>Chroniques des Parties</h2>
+        <a href="https://archive.org/details/le-grimoire-de-lombre-chroniques" target="_blank" rel="noopener">Archive textes →</a>
       </div>
-      <div class="chronicles-list">
-        <article class="card chronicle-card">
-          <h3>Partie 1 — Les Portes du Donjon de Cristal</h3>
-          <details class="story" open>
-            <summary>Lire le compte-rendu</summary>
-            <div class="story-body"><p>C&#x27;est dans une cité marquée par le chaos qu&#x27;Armione, Brandir, Lagherta, Lysandre et Perséphonix se retrouvèrent réunis, chacun poussé par une même obsession : retrouver la trace du mystérieux mage noir qui avait bouleversé leurs vies.</p><p>Alors qu&#x27;ils faisaient halte devant un imposant bâtiment, un inconnu à l&#x27;allure noble, vêtu d&#x27;hermine, les interpella. Sans révéler son nom, il leur affirma qu&#x27;il les connaissait — bien qu&#x27;eux n&#x27;aient aucun souvenir de lui — et leur annonça que leurs destins étaient désormais liés. Avant de disparaître dans l&#x27;ombre, il leur lança un défi : prouver leur valeur en réussissant l&#x27;épreuve d&#x27;entrée de la Guilde des Aventuriers.</p><p>Poussés par la curiosité autant que par la nécessité, les cinq compagnons poussèrent les portes de la Guilde. Ils y furent accueillis par <strong>Bruno Gringarde</strong>, le recruteur, qui leur exposa les termes de l&#x27;épreuve : explorer et survivre au <strong>Donjon de Cristal</strong> pour gagner officiellement le titre d&#x27;aventuriers. Avant le départ, <strong>Moumoun</strong>, la forgeronne de la Guilde, prit soin de les équiper du matériel nécessaire à l&#x27;expédition. Puis Bruno Gringarde ouvrit les lourds battants menant aux profondeurs et leur lança un simple : « Bonne chance. »</p><hr><h4>L&#x27;entrée du donjon</h4><p>Dès le premier couloir, deux chemins s&#x27;offraient au groupe : une porte en bois et une porte en bronze, solidement verrouillée. Fidèle à sa réputation, <strong>Brandir</strong> ne s&#x27;embarrassa pas de subtilités et pulvérisa la porte en bois d&#x27;un grand coup de hache.</p><p>Le couloir les mena devant une première salle encombrée de trois tonneaux. Sans hésiter, le nain en réduisit deux en miettes tandis qu&#x27;<strong>Armione</strong> ouvrait prudemment le troisième… pour constater qu&#x27;il était désespérément vide.</p><p>Dans la deuxième salle, <strong>Lysandre</strong> et <strong>Lagherta</strong>, partis en éclaireurs, tombèrent nez à nez avec un gobelin. Avant même que Brandir, Armione et Perséphonix ne les rejoignent, Lysandre cribla la créature de deux flèches bien placées et l&#x27;acheva promptement.</p><h4>La pierre rouge et le silence des profondeurs</h4><p>Plus loin, une nouvelle porte en bois barra la route. Brandir voulut réitérer son exploit, mais le bois résista assez pour ébrécher sa hache. Derrière se trouvait une ancienne salle à manger, où le groupe reprit brièvement des forces en récupérant quelques vivres.</p><p>La porte du fond s&#x27;ouvrit sans difficulté sur une pièce étrange, dominée par un piédestal sur lequel reposait une <strong>pierre triangulaire rouge</strong>. Méfiants, Armione, Perséphonix et Lysandre inspectèrent minutieusement l&#x27;autel à la recherche d&#x27;un piège, sans rien déceler. Lassé d&#x27;attendre, Brandir s&#x27;empara de la pierre sans réfléchir… et, contre toute attente, rien ne se déclencha.</p><p>L&#x27;exploration se poursuivit vers une cinquième salle, plongée dans la pénombre. Brandir et Armione y surprirent une <strong>chauve-souris géante</strong> profondément endormie et choisirent sagement de battre en retraite sans un bruit. Pendant ce temps, Lysandre, Lagherta et Perséphonix découvraient une sixième pièce aménagée en bureau, où ils mirent la main sur un précieux <strong>schéma détaillant l&#x27;ouverture de la porte de bronze</strong>.</p><h4>Le sang, les flammes et l&#x27;or</h4><p>Réunis de nouveau, les cinq aventuriers pénétrèrent dans une septième salle, où deux gobelins leur tendirent une embuscade. Lysandre décocha une flèche qui blessa gravement le premier ennemi. Brandir chargea à son tour pour l&#x27;achever… mais son coup manqua sa cible et sa hache alla se planter droit dans la jambe de Lysandre !</p><p>Sans laisser le temps aux créatures de profiter de la confusion, <strong>Armione</strong> déchaîna deux boules de feu qui réduisirent les deux gobelins en cendres.</p><p>Au fond de la salle reposait un coffre poussiéreux. Échaudé, Lysandre redouta un piège — ou pire, un mimique. Brandir, fidèle à lui-même, fit sauter le loquet et y découvrit <strong>30 pièces d&#x27;or</strong>, première récompense d&#x27;une aventure qui ne faisait que commencer.</p></div>
-          </details>
+      <div class="grid">
+        <article class="card">
+          <div>
+            <h3>Partie 1 — Les Portes du Donjon de Cristal</h3>
+            <p>Compte-rendu complet de la session.</p>
+          </div>
+          <div class="card-actions">
+            <button type="button" class="btn-inline" data-open-book="chron-01">Ouvrir dans la liseuse</button>
+          </div>
         </article>
       </div>
-    </section>
 
-    <section id="episodes">
       <div class="section-head">
-        <h2>Épisodes Vidéo</h2>
-        <a href="https://archive.org/details/le-grimoire-de-lombre-episodes-video" target="_blank" rel="noopener">Voir l'item sur Archive.org →</a>
+        <h2>Épisodes Vidéo &amp; Audios liés</h2>
+        <a href="https://archive.org/details/le-grimoire-de-lombre-episodes-video" target="_blank" rel="noopener">Archive vidéos →</a>
       </div>
       <div class="grid">
         <article class="card">
@@ -322,7 +427,12 @@
             <p>Épisode vidéo de la campagne.</p>
           </div>
           <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-episodes-video/01%20-%20Le%20Donjon%20de%20Cristal%20%28Ep%201%29.mp4"></video>
+          <div class="linked-audio">
+            <span class="mini-label">Audio associé :</span>
+            <audio controls preload="metadata" src="https://archive.org/download/le-grimoire-de-lombre-audios/01%20-%20Le%20Donjon%20de%20Cristal.mp3"></audio>
+          </div>
           <div class="card-actions">
+            <button type="button" class="btn-inline" data-open-book="chron-01">Ouvrir la chronique dans la liseuse</button>
             <a href="https://archive.org/download/le-grimoire-de-lombre-episodes-video/01%20-%20Le%20Donjon%20de%20Cristal%20%28Ep%201%29.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
           </div>
         </article>
@@ -332,7 +442,12 @@
             <p>Épisode vidéo de la campagne.</p>
           </div>
           <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-episodes-video/02%20-%20Le%20Donjon%20de%20Cristal%20%28Ep%202%29.mp4"></video>
+          <div class="linked-audio">
+            <span class="mini-label">Audio associé :</span>
+            <audio controls preload="metadata" src="https://archive.org/download/le-grimoire-de-lombre-audios/02%20-%20Le%20Donjon%20de%20Cristal.mp3"></audio>
+          </div>
           <div class="card-actions">
+            
             <a href="https://archive.org/download/le-grimoire-de-lombre-episodes-video/02%20-%20Le%20Donjon%20de%20Cristal%20%28Ep%202%29.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
           </div>
         </article>
@@ -342,7 +457,12 @@
             <p>Épisode vidéo de la campagne.</p>
           </div>
           <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-episodes-video/03%20-%20La%20Compagnie%20Avance%20%28Ep%203%29.mp4"></video>
+          <div class="linked-audio">
+            <span class="mini-label">Audio associé :</span>
+            <audio controls preload="metadata" src="https://archive.org/download/le-grimoire-de-lombre-audios/03%20-%20La%20Compagnie%20Avance.mp3"></audio>
+          </div>
           <div class="card-actions">
+            
             <a href="https://archive.org/download/le-grimoire-de-lombre-episodes-video/03%20-%20La%20Compagnie%20Avance%20%28Ep%203%29.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
           </div>
         </article>
@@ -352,17 +472,197 @@
             <p>Épisode vidéo de la campagne.</p>
           </div>
           <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-episodes-video/04%20-%20Le%20Grimoire%20des%20Ombres%20%28Intro%20Acte%201%29.mp4"></video>
+          <div class="linked-audio">
+            <span class="mini-label">Audio associé :</span>
+            <audio controls preload="metadata" src="https://archive.org/download/le-grimoire-de-lombre-audios/04%20-%20Le%20Grimoire%20des%20Ombres.mp3"></audio>
+          </div>
           <div class="card-actions">
+            
             <a href="https://archive.org/download/le-grimoire-de-lombre-episodes-video/04%20-%20Le%20Grimoire%20des%20Ombres%20%28Intro%20Acte%201%29.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
           </div>
         </article>
       </div>
     </section>
 
-    <section id="audios">
+    <section id="panel-personnages" class="tabpanel" role="tabpanel" aria-labelledby="tab-personnages" hidden>
+      <div class="section-head">
+        <h2>Personnages du Groupe</h2>
+        <a href="https://archive.org/details/le-grimoire-de-lombre-personnages" target="_blank" rel="noopener">Archive personnages →</a>
+      </div>
+      <div class="grid">
+        <article class="card">
+          <div>
+            <h3>Armione, l&#x27;Elfe Exilee</h3>
+            <p>L&#x27;Elfe Exilée — maîtresse des arcanes et des runes.</p>
+          </div>
+          <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-personnages/Armione%2C%20l%27Elfe%20Exilee.mp4"></video>
+          <div class="card-actions">
+            <button type="button" class="btn-inline" data-open-book="char-armione">Lire dans la liseuse</button>
+            <a href="https://archive.org/download/le-grimoire-de-lombre-personnages/Armione%2C%20l%27Elfe%20Exilee.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
+          </div>
+        </article>
+        <article class="card">
+          <div>
+            <h3>Brandir Pourfendeur de Cranes (La Guerre de la Biere)</h3>
+            <p>Pourfendeur de Crânes — guerrier nain à la grande hache (La Guerre de la Bière).</p>
+          </div>
+          <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-personnages/Brandir%20Pourfendeur%20de%20Cranes%20%28La%20Guerre%20de%20la%20Biere%29.mp4"></video>
+          <div class="card-actions">
+            <button type="button" class="btn-inline" data-open-book="char-brandir">Lire dans la liseuse</button>
+            <a href="https://archive.org/download/le-grimoire-de-lombre-personnages/Brandir%20Pourfendeur%20de%20Cranes%20%28La%20Guerre%20de%20la%20Biere%29.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
+          </div>
+        </article>
+        <article class="card">
+          <div>
+            <h3>Lagherta Veille sur Vous</h3>
+            <p>Veille sur Vous — prêtresse lumineuse et protectrice du groupe.</p>
+          </div>
+          <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-personnages/Lagherta%20Veille%20sur%20Vous.mp4"></video>
+          <div class="card-actions">
+            <button type="button" class="btn-inline" data-open-book="char-lagherta">Lire dans la liseuse</button>
+            <a href="https://archive.org/download/le-grimoire-de-lombre-personnages/Lagherta%20Veille%20sur%20Vous.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
+          </div>
+        </article>
+        <article class="card">
+          <div>
+            <h3>Lysandre le Pieux</h3>
+            <p>Le Pieux — compagnon sombre et résolu, gardien de l&#x27;anneau.</p>
+          </div>
+          <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-personnages/Lysandre%20le%20Pieux.mp4"></video>
+          <div class="card-actions">
+            <button type="button" class="btn-inline" data-open-book="char-lysandre">Lire dans la liseuse</button>
+            <a href="https://archive.org/download/le-grimoire-de-lombre-personnages/Lysandre%20le%20Pieux.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
+          </div>
+        </article>
+        <article class="card">
+          <div>
+            <h3>Persephonix, Libre et Fiere</h3>
+            <p>Libre et Fière — ensorceleuse des flammes et des vents.</p>
+          </div>
+          <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-personnages/Persephonix%2C%20Libre%20et%20Fiere.mp4"></video>
+          <div class="card-actions">
+            <button type="button" class="btn-inline" data-open-book="char-persephonix">Lire dans la liseuse</button>
+            <a href="https://archive.org/download/le-grimoire-de-lombre-personnages/Persephonix%2C%20Libre%20et%20Fiere.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="panel-codex" class="tabpanel" role="tabpanel" aria-labelledby="tab-codex" hidden>
+      <div class="section-head">
+        <h2>Codex de la Campagne</h2>
+      </div>
+        <div class="codex-group">
+          <h3>Personnages Non-Joueurs (PNJ)</h3>
+          <div class="grid">
+          <article class="card">
+            <div>
+              <h3>Bruno Gringarde <span class="badge">Recruteur de la Guilde des Aventuriers</span></h3>
+              <p>A confié l&#x27;épreuve du Donjon de Cristal au groupe et ouvert les portes du donjon.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div>
+              <h3>Moumoun <span class="badge">Forgeronne de la Guilde</span></h3>
+              <p>A fourni l&#x27;équipement nécessaire au groupe avant leur départ dans le Donjon de Cristal.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div>
+              <h3>L&#x27;Homme à l&#x27;Hermine <span class="badge">Inconnu mystérieux</span></h3>
+              <p>A interpellé le groupe en ville, affirmant qu&#x27;il les connaissait et que leurs destins étaient liés.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div>
+              <h3>L&#x27;Homme en Noir / Mage Noir <span class="badge">Antagoniste</span></h3>
+              <p>Lié au Grimoire, à la malédiction de Brandir (eau à la place de la bière), au drame de Lysandre et au village calciné de Perséphonix.</p>
+            </div>
+          </article>
+          </div>
+        </div>
+        <div class="codex-group">
+          <h3>Lieux</h3>
+          <div class="grid">
+          <article class="card">
+            <div>
+              <h3>Le Donjon de Cristal </h3>
+              <p>Épreuve d&#x27;entrée de la Guilde. Contient une porte de bronze verrouillée, une chauve-souris géante endormie, un bureau et des gobelins.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div>
+              <h3>La Guilde des Aventuriers </h3>
+              <p>Lieu de recrutement où le groupe a rencontré Bruno Gringarde et Moumoun.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div>
+              <h3>La Tour Blanche </h3>
+              <p>Ancienne école de magie d&#x27;Armione, d&#x27;où elle a été bannie après la destruction de la bibliothèque.</p>
+            </div>
+          </article>
+          </div>
+        </div>
+        <div class="codex-group">
+          <h3>Objets & Trésors</h3>
+          <div class="grid">
+          <article class="card">
+            <div>
+              <h3>Le Grimoire de l&#x27;Ombre </h3>
+              <p>Artefact ancien au cœur de l&#x27;aventure — lié à la perte de mémoire de Lagherta, aux visions de Perséphonix et à l&#x27;exil d&#x27;Armione.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div>
+              <h3>Pierre triangulaire rouge </h3>
+              <p>Trouvée sur un piédestal dans le Donjon de Cristal et prise par Brandir sans déclencher de piège.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div>
+              <h3>Schéma de la porte de bronze </h3>
+              <p>Trouvé dans le bureau (6e salle) par Lysandre, Lagherta et Perséphonix.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div>
+              <h3>Bourse du groupe : 30 pièces d&#x27;or </h3>
+              <p>Trouvées dans le coffre de la 7e salle du Donjon de Cristal.</p>
+            </div>
+          </article>
+          </div>
+        </div>
+        <div class="codex-group">
+          <h3>Quêtes Actives</h3>
+          <div class="grid">
+          <article class="card">
+            <div>
+              <h3>Devenir Aventuriers de la Guilde <span class="badge">En cours</span></h3>
+              <p>Terminer l&#x27;exploration du Donjon de Cristal et ouvrir la porte de bronze.</p>
+            </div>
+          </article>
+          <article class="card">
+            <div>
+              <h3>Retrouver l&#x27;Homme en Noir &amp; le Grimoire <span class="badge">En cours</span></h3>
+              <p>Quête commune liée au passé de Brandir, Lysandre, Armione, Perséphonix et Lagherta.</p>
+            </div>
+          </article>
+          </div>
+        </div>
+    </section>
+
+    <section id="panel-audios" class="tabpanel" role="tabpanel" aria-labelledby="tab-audios" hidden>
       <div class="section-head">
         <h2>Récits &amp; Sessions Audio</h2>
-        <a href="https://archive.org/details/le-grimoire-de-lombre-audios" target="_blank" rel="noopener">Voir l'item sur Archive.org →</a>
+        <a href="https://archive.org/details/le-grimoire-de-lombre-audios" target="_blank" rel="noopener">Archive audios →</a>
+      </div>
+      <div class="playlist-bar">
+        <div class="playlist-top">
+          <strong id="playlistNow">Prêt à lire la playlist complète</strong>
+          <button type="button" class="btn primary" id="playAllBtn">Lire tout en continu</button>
+        </div>
+        <audio id="playlistPlayer" controls preload="metadata"></audio>
       </div>
       <div class="grid">
         <article class="card">
@@ -372,6 +672,7 @@
           </div>
           <audio controls preload="metadata" src="https://archive.org/download/le-grimoire-de-lombre-audios/01%20-%20Le%20Donjon%20de%20Cristal.mp3"></audio>
           <div class="card-actions">
+            <button type="button" class="btn-inline" data-play-track="0">Lire dans la playlist</button>
             <a href="https://archive.org/download/le-grimoire-de-lombre-audios/01%20-%20Le%20Donjon%20de%20Cristal.mp3" target="_blank" rel="noopener">Télécharger (.mp3)</a>
           </div>
         </article>
@@ -382,6 +683,7 @@
           </div>
           <audio controls preload="metadata" src="https://archive.org/download/le-grimoire-de-lombre-audios/02%20-%20Le%20Donjon%20de%20Cristal.mp3"></audio>
           <div class="card-actions">
+            <button type="button" class="btn-inline" data-play-track="1">Lire dans la playlist</button>
             <a href="https://archive.org/download/le-grimoire-de-lombre-audios/02%20-%20Le%20Donjon%20de%20Cristal.mp3" target="_blank" rel="noopener">Télécharger (.mp3)</a>
           </div>
         </article>
@@ -392,6 +694,7 @@
           </div>
           <audio controls preload="metadata" src="https://archive.org/download/le-grimoire-de-lombre-audios/03%20-%20La%20Compagnie%20Avance.mp3"></audio>
           <div class="card-actions">
+            <button type="button" class="btn-inline" data-play-track="2">Lire dans la playlist</button>
             <a href="https://archive.org/download/le-grimoire-de-lombre-audios/03%20-%20La%20Compagnie%20Avance.mp3" target="_blank" rel="noopener">Télécharger (.mp3)</a>
           </div>
         </article>
@@ -402,94 +705,131 @@
           </div>
           <audio controls preload="metadata" src="https://archive.org/download/le-grimoire-de-lombre-audios/04%20-%20Le%20Grimoire%20des%20Ombres.mp3"></audio>
           <div class="card-actions">
+            <button type="button" class="btn-inline" data-play-track="3">Lire dans la playlist</button>
             <a href="https://archive.org/download/le-grimoire-de-lombre-audios/04%20-%20Le%20Grimoire%20des%20Ombres.mp3" target="_blank" rel="noopener">Télécharger (.mp3)</a>
           </div>
         </article>
       </div>
     </section>
 
-    <section id="personnages">
-      <div class="section-head">
-        <h2>Personnages du Groupe</h2>
-        <a href="https://archive.org/details/le-grimoire-de-lombre-personnages" target="_blank" rel="noopener">Voir l'item sur Archive.org →</a>
-      </div>
-      <div class="grid">
-        <article class="card">
-          <div>
-            <h3>Armione, l&#x27;Elfe Exilee</h3>
-            <p>L&#x27;Elfe Exilée — maîtresse des arcanes et des runes.</p>
-          </div>
-          <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-personnages/Armione%2C%20l%27Elfe%20Exilee.mp4"></video>
-          <details class="story">
-            <summary>Lire son histoire</summary>
-            <div class="story-body"><p>Armione, l&#x27;exilée de la Tour Blanche</p><p>Armione est une elfe d&#x27;un certain âge qui pratique la magie depuis sa plus tendre enfance. Comme tous les apprentis mages, elle vit enfermée dans la Tour Blanche, un lieu où la magie est la loi et où chaque aspect de l&#x27;existence est régi par des règles strictes.</p><p>Studieuse et assidue, Armione excelle dans son apprentissage. Pourtant, derrière cette apparente discipline se cache un profond désir de liberté. Elle rêve de quitter la tour, de découvrir le monde extérieur et de voir de ses propres yeux ce qui se passe au-delà de ses murs immaculés. Mais seuls les mages ayant achevé leur formation sont autorisés à sortir et à accomplir les missions qui leur sont confiées.</p><p>Au fil des années, cette existence cloîtrée a fait naître en elle une colère sourde. Elle obéit aux règles, suit les enseignements et maîtrise ses gestes, mais son esprit aspire à autre chose. Elle étouffe sous le poids des interdits et des attentes de ses maîtres.</p><p>Un jour, alors qu&#x27;elle étudie dans la bibliothèque de la tour, un étrange livre attire son attention. Posé parmi des ouvrages anciens, il semble l&#x27;appeler silencieusement. Incapable de détourner le regard, Armione s&#x27;en approche et tend la main vers lui.</p><p>Au moment où ses doigts effleurent la couverture, son esprit bascule. Elle sombre dans une transe profonde, coupée du monde qui l&#x27;entoure.</p><p>Lorsqu&#x27;elle reprend conscience, la bibliothèque n&#x27;est plus qu&#x27;un champ de ruines. Les rayonnages sont renversés, les livres brûlent et les flammes dévorent les précieuses collections de la tour. Plusieurs mages expérimentés l&#x27;ont maîtrisée de force, mais aucun ne semble comprendre ce qui vient de se produire.</p><p>Armione, elle-même, ne se souvient presque de rien. Elle ne ressent qu&#x27;une chose : un calme intérieur étrange, profond, presque apaisant. Pour la première fois depuis des années, la colère qui l&#x27;habite semble s&#x27;être tue.</p><p>Interrogée par les maîtres de la tour, elle raconte les quelques souvenirs qui lui restent et leur parle du livre. Les recherches commencent aussitôt. Pourtant, l&#x27;ouvrage demeure introuvable. Il semble s&#x27;être volatilisé, et même le plus sage des mages de la Tour Blanche affirme n&#x27;en avoir jamais entendu parler.</p><p>Les jours passent. La bibliothèque est reconstruite, les dégâts sont réparés et la vie reprend son cours. Aucun autre incident ne vient troubler la tranquillité de la tour.</p><p>Jusqu&#x27;au jour où, pendant un cours de magie, Armione perd à nouveau le contrôle d&#x27;elle-même.</p><p>Ses émotions, longtemps contenues, déferlent soudainement. Mais cette fois, sa magie ne se contente pas de libérer une force incontrôlable : elle agit à l&#x27;opposé de sa volonté. Les sorts de guérison deviennent mortels. Les enchantements censés protéger se retournent contre ceux qu&#x27;ils devaient préserver. Les objets s&#x27;élèvent dans les airs avant de s&#x27;écraser violemment contre les murs. Chaque tentative pour reprendre le contrôle ne fait qu&#x27;aggraver le chaos.</p><p>Les mages les plus expérimentés tentent de l&#x27;arrêter, mais leurs sorts semblent impuissants face à cette magie étrange et imprévisible.</p><p>La Tour Blanche finit par prononcer son bannissement.</p><p>Désormais livrée à elle-même, Armione n&#x27;a plus qu&#x27;un objectif : retrouver le mystérieux livre qui a bouleversé son existence. Elle est convaincue qu&#x27;il détient la clé de son pouvoir et qu&#x27;il lui permettra de reprendre le contrôle de sa magie, mais surtout de ses émotions.</p><p>Commence alors une quête qui la conduira bien au-delà des murs de la tour, dans un monde qu&#x27;elle n&#x27;a connu jusque-là qu&#x27;à travers les livres.</p><p>Un monde où elle devra découvrir que la magie n&#x27;obéit pas toujours aux règles qu&#x27;on lui a enseignées… et que certaines vérités auraient peut-être dû rester enfouies.</p></div>
-          </details>
-          <div class="card-actions">
-            <a href="https://archive.org/download/le-grimoire-de-lombre-personnages/Armione%2C%20l%27Elfe%20Exilee.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
-          </div>
-        </article>
-        <article class="card">
-          <div>
-            <h3>Brandir Pourfendeur de Cranes (La Guerre de la Biere)</h3>
-            <p>Pourfendeur de Crânes — guerrier nain à la grande hache (La Guerre de la Bière).</p>
-          </div>
-          <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-personnages/Brandir%20Pourfendeur%20de%20Cranes%20%28La%20Guerre%20de%20la%20Biere%29.mp4"></video>
-          <details class="story">
-            <summary>Lire son histoire</summary>
-            <div class="story-body"><p>« Un nain sans honneur est un nain déjà mort. Autant choisir qui lui fracassera le crâne. »</p><p>Je me nomme Brandir, fils de la montagne, mineur de métier et nain de naissance. Je viens du clan Karak Izor, un vieux clan nain établi dans les profondeurs des monts, là où les galeries sont aussi anciennes que les légendes et où l&#x27;or coule presque autant que la bière dans les tavernes.</p><p>J&#x27;ai longtemps mené une vie paisible. Je travaillais dans les mines, je partageais mes repas avec mes frères de clan et, chaque soir, je me rendais dans la meilleure taverne de la montagne pour y boire jusqu&#x27;à oublier les soucis de la journée. C&#x27;était une vie simple. Une vie heureuse. Une vie de nain.</p><p>Puis les elfes sont arrivés.</p><p>Une délégation de ces grandes perches aux oreilles pointues s&#x27;est présentée aux portes de notre montagne. Ils souhaitaient négocier l&#x27;achat de plusieurs pierres précieuses extraites de nos mines. Des rubis, des émeraudes et quelques diamants dont la valeur aurait suffi à acheter trois royaumes humains.</p><hr><p>Alors, je bus. Je commandai une deuxième chope. Puis une troisième. Et une quatrième.</p><p>L&#x27;homme continuait de parler. À un moment, il évoqua même les péchés des mortels et le prix de leurs faiblesses.</p><p>Je reposai ma chope avec un grand bruit.<br>— Écoute-moi bien, longue carcasse ! Si tu n&#x27;as rien d&#x27;intéressant à dire, ferme-la et laisse-moi boire !</p><p>Il ne réagit pas. Il continua simplement à me fixer sous sa capuche.</p><p>Alors, j&#x27;en eus assez. Je le saisis par le col et le repoussai brutalement.<br>— DÉGAGE !</p><p>Et soudain, le monde s&#x27;arrêta.</p><p>Le tavernier demeura figé, une chope à la main. Une goutte de bière resta suspendue dans les airs. Les flammes du foyer cessèrent de danser. Même le vent, dehors, sembla retenir son souffle. Je regardai autour de moi, la main toujours crispée sur le col de l&#x27;inconnu.</p><p>Puis j&#x27;entendis une voix. Ce n&#x27;était pas celle de l&#x27;homme. Elle semblait venir de partout à la fois, profonde et glaciale, comme si les pierres elles-mêmes s&#x27;étaient mises à parler :<br>— Brandir, fils de la montagne. Toi qui as fait de la bière ton refuge et qui as perdu ton honneur à cause de ton ivresse, écoute bien ta sentence.</p><p>Je voulus répondre, mais aucun son ne sortit de ma bouche.<br>— Puisque tu ne sais pas vivre sans boire, tu apprendras à vivre sans jamais pouvoir t&#x27;enivrer. À partir de cet instant, toute boisson alcoolisée qui franchira tes lèvres deviendra de l&#x27;eau.</p><p>Mon sang se glaça.<br>— Que chaque chope te rappelle ta faiblesse. Que chaque taverne te rappelle ta honte. Et que ta soif te poursuive jusqu&#x27;à la fin de tes jours.</p><p>La voix se tut. Le temps reprit son cours. La goutte de bière tomba. Le tavernier acheva son geste. Les flammes recommencèrent à crépiter. Et l&#x27;homme vêtu de noir avait disparu.</p><p>Je restai immobile quelques secondes, incapable de comprendre ce qui venait de se produire. Puis je saisis ma chope, la portai à mes lèvres et bus une longue gorgée.</p><p>De l&#x27;eau.</p><p>Je recrachai tout sur le comptoir.<br>— PAR LA BARBE DE MES ANCÊTRES !</p><p>Je commandai une autre chope, persuadé qu&#x27;il s&#x27;agissait d&#x27;une plaisanterie. Puis une troisième. Puis une quatrième. Toujours de l&#x27;eau. Je tentai le vin, l&#x27;hydromel et même un alcool humain si infect que j&#x27;aurais préféré boire de l&#x27;huile de lampe. Rien n&#x27;y fit. Tout devenait de l&#x27;eau.</p><p>Cette nuit-là, je compris que les dieux avaient un sens de l&#x27;humour particulièrement cruel.</p><hr><p>Depuis ce jour, je poursuis deux objectifs.</p><p>Le premier est de tuer autant de trolls que possible, jusqu&#x27;à ce que mon nom soit de nouveau prononcé avec respect dans les halls de mon clan. Je cherche les combats les plus dangereux, les créatures les plus féroces et les endroits où même les chasseurs expérimentés refusent de s&#x27;aventurer. Je n&#x27;ai plus peur de mourir. Après tout, j&#x27;ai déjà perdu ce qui comptait le plus pour un nain.</p><p>Le second objectif est de retrouver l&#x27;homme vêtu de noir. Je veux connaître son nom. Je veux savoir comment il a arrêté le temps et comment il a pu maudire un nain au point de transformer chaque boisson alcoolisée en eau. Et surtout, je veux lui faire ravaler ses paroles. Je lui arracherai sa capuche, je lui fracasserai les dents et je lui ferai regretter le jour où il a décidé de s&#x27;en prendre à Brandir Poing-de-Fer.</p><p>Car je suis un nain. Je suis têtu, rancunier et doté d&#x27;une mémoire qui ne pardonne rien.</p><p>Et si je dois parcourir le monde entier pour retrouver cet homme, alors je parcourrai le monde entier. Si je dois affronter des dragons, je les affronterai. Si je dois traverser les terres des elfes, je traverserai ces terres, même si cela me coûte mes dernières dents. Et si je dois mourir pour accomplir ma vengeance, alors je mourrai la hache à la main.</p><p>Mais je vous le garantis sur mon honneur, celui qu&#x27;il me reste : le jour où je retrouverai cet homme vêtu de noir, il regrettera d&#x27;avoir transformé ma bière en eau.</p><p>Car on peut enlever son or à un nain. On peut lui prendre sa maison, sa hache ou même sa barbe. Mais lui enlever sa bière ? C&#x27;est déclarer la guerre à toute une montagne.</p><p>Et moi, je suis Brandir le Pourfendeur de Crâne. Que les trolls tremblent, que les elfes se méfient et que cet homme prie pour ne jamais croiser ma route. Car ma vengeance sera froide. Très froide. Aussi froide que l&#x27;eau que je suis désormais condamné à boire.</p></div>
-          </details>
-          <div class="card-actions">
-            <a href="https://archive.org/download/le-grimoire-de-lombre-personnages/Brandir%20Pourfendeur%20de%20Cranes%20%28La%20Guerre%20de%20la%20Biere%29.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
-          </div>
-        </article>
-        <article class="card">
-          <div>
-            <h3>Lagherta Veille sur Vous</h3>
-            <p>Veille sur Vous — prêtresse lumineuse et protectrice du groupe.</p>
-          </div>
-          <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-personnages/Lagherta%20Veille%20sur%20Vous.mp4"></video>
-          <details class="story">
-            <summary>Lire son histoire</summary>
-            <div class="story-body"><p>Lagherta — Celle qui répare les âmes</p><p>Lagherta est une âme condamnée à se réincarner encore et encore par la volonté d&#x27;un artefact ancien. À chaque nouvelle vie, elle perd tous ses souvenirs liés à cet artefact, oubliant jusqu&#x27;à son existence et le mal qu&#x27;il lui a infligé.</p><p>Pourtant, quelque chose demeure au plus profond d&#x27;elle.</p><p>Dans chacune de ses incarnations, Lagherta ressent une attirance inexplicable envers les personnes dont l&#x27;âme a été blessée par ce même artefact. Elle ne sait ni pourquoi elle les reconnaît, ni pourquoi leur douleur résonne si profondément en elle. Elle ne comprend pas pourquoi elle ressent le besoin de les aider à se reconstruire, à retrouver leur identité et à recoller les fragments de leur âme brisée.</p></div>
-          </details>
-          <div class="card-actions">
-            <a href="https://archive.org/download/le-grimoire-de-lombre-personnages/Lagherta%20Veille%20sur%20Vous.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
-          </div>
-        </article>
-        <article class="card">
-          <div>
-            <h3>Lysandre le Pieux</h3>
-            <p>Le Pieux — compagnon sombre et résolu, gardien de l&#x27;anneau.</p>
-          </div>
-          <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-personnages/Lysandre%20le%20Pieux.mp4"></video>
-          <details class="story">
-            <summary>Lire son histoire</summary>
-            <div class="story-body"><p>Je m&#x27;appelle Lysandre… Lysandre le Pieux.</p><p>Certains pensent que c&#x27;est une moquerie, d&#x27;autres y voient une marque de foi. Ils ont tous les deux raison. Ma foi ne va ni aux dieux ni aux rois, mais à la promesse que j&#x27;ai faite aux miens, sous les cendres de ma ferme.</p><p>Je viens de Bretonnie. Dans ma jeunesse, j&#x27;étais un noble, mais certainement pas le genre de noble que l&#x27;on présente volontiers dans les grandes réceptions. J&#x27;étais trop curieux, trop fouineur et incapable de résister à l&#x27;envie de mettre mon nez là où il ne fallait pas.</p><p>J&#x27;avais une véritable passion pour les bagues et les colliers, enchantés ou non. Je les collectionnais avec l&#x27;avidité d&#x27;une pie, cet oiseau voleur qui ne peut s&#x27;empêcher de s&#x27;emparer de tout ce qui brille. Chaque bijou avait son histoire, et je prenais un plaisir immense à découvrir leur provenance.</p><p>Mais ma curiosité allait bien au-delà des bijoux.</p><p>À l&#x27;âge de quinze ans, alors que je fouillais une pièce à laquelle je n&#x27;avais évidemment aucune autorisation d&#x27;accéder, je surpris une conversation entre plusieurs personnages haut placés. Une discussion dont je n&#x27;aurais jamais dû entendre le moindre mot.</p><p>Malheureusement, ils me repérèrent.</p><p>Ce que j&#x27;avais entendu était suffisamment grave pour que l&#x27;on décide de m&#x27;emprisonner. Mes parents tentèrent de me défendre, mais ils comprirent rapidement que ma situation était sans issue. Ils me supplièrent alors de fuir, de partir loin et de ne jamais revenir.</p><p>Je leur obéis.</p><p>Ce fut la dernière fois que je les vis vivants.</p><p>Peu après mon départ, mes parents furent exécutés.</p><p>Je n&#x27;avais plus de titre, plus de maison et plus de famille. Je dus alors me cacher parmi les paysans les plus misérables et les gens les moins recommandables du royaume. Pendant plusieurs années, je n&#x27;eus qu&#x27;un seul objectif : survivre.</p><p>J&#x27;appris à me cacher, à rester discret, à voler lorsque la faim devenait trop forte et à mendier lorsque je n&#x27;avais plus rien. Je côtoyais des voleurs, des escrocs et toutes sortes de crapules. Pourtant, malgré cette existence, je conservais une certaine limite : je refusais de tuer pour gagner de l&#x27;argent.</p><p>Avec le temps, je découvris un moyen plus intéressant de remplir ma bourse : livrer les meurtriers et les voleurs à la justice contre quelques pièces. Après tout, pourquoi risquer ma peau à commettre des crimes quand je pouvais gagner de l&#x27;argent en attrapant ceux qui les commettaient ?</p><p>Et puis, je dois bien l&#x27;avouer, j&#x27;avais pris une petite habitude.</p><p>À chaque prise, je m&#x27;autorisais à conserver une bague ou un collier appartenant à ma capture. Un petit souvenir, comme je disais. Une manière de me constituer une collection tout en gagnant honnêtement ma vie… du moins, selon ma propre définition de l&#x27;honnêteté.</p><p>Les années passèrent ainsi, jusqu&#x27;au jour où mon existence bascula une nouvelle fois.</p><p>J&#x27;étais dans une taverne, en train de me vanter de ma dernière prise auprès de quelques habitués. Je racontais comment j&#x27;avais réussi à livrer un voleur particulièrement rusé à la justice, tout en leur montrant fièrement le bijou que j&#x27;avais conservé en souvenir.</p><p>C&#x27;est alors qu&#x27;un homme vêtu de noir vint m&#x27;aborder.</p><p>Il semblait intéressé par mon travail. Il me posa quelques questions sur mes captures, sur mes méthodes et sur les petits souvenirs que je conservais après chacune d&#x27;elles.</p><p>Je trouvais cet homme étrange, mais après tout, j&#x27;avais l&#x27;habitude de côtoyer des individus peu ordinaires.</p><p>Lorsque je décidai finalement de prendre congé, quelque chose d&#x27;impossible se produisit.</p><p>Le temps s&#x27;arrêta.</p><p>Les conversations cessèrent. Les flammes des bougies se figèrent. Les chopes restèrent suspendues dans les airs. Plus rien ne bougeait.</p><p>Puis une voix résonna dans mon esprit.</p><p>Ce n&#x27;était pas celle de l&#x27;homme en noir.</p><p>« Toi qui chasses tes semblables pour quelques pièces… Toi qui les livres à leurs bourreaux et vas même jusqu&#x27;à leur voler leurs possessions pour enrichir ta collection… Je vais te montrer ce qu&#x27;est le véritable désespoir. »</p><p>Des images envahirent mon esprit.</p><p>Des guerres sans fin, des villages réduits en cendres, des hommes massacrés, des cris, du sang et des champs ravagés par le chaos. Je voyais des familles déchirées, des innocents périr et des royaumes entiers sombrer dans la destruction.</p><p>Puis la voix reprit :</p><p>« Et pour terminer… je vais te le faire ressentir. »</p><p>Soudain, le temps reprit son cours.</p><p>Je ne pris pas le temps de comprendre ce qui venait de se passer. Je quittai la taverne et me précipitai chez moi, avec un mauvais pressentiment qui me nouait l&#x27;estomac.</p><p>Mais lorsque j&#x27;arrivai…</p><p>Je tombai à genoux.</p><p>Ma maison brûlait.</p><p>Les flammes dévoraient ma ferme et ma famille était prisonnière de l&#x27;incendie. Je voulais courir vers eux, les sauver, faire quelque chose… n&#x27;importe quoi !</p><p>Mais je ne pouvais rien faire.</p><p>Je ne pouvais que regarder mon monde disparaître sous mes yeux.</p><p>Tout ce que j&#x27;avais construit, tout ce que j&#x27;avais réussi à retrouver après des années de misère, venait de m&#x27;être arraché.</p><p>Alors, au milieu des flammes et des cendres encore fumantes, je fis un serment.</p><p>Je jurai sur les restes de ma famille et de ma maison que je retrouverais cet homme en noir. Je retrouverais cette voix et ce livre dont elle semblait provenir. Et je les détruirais.</p><p>Je ne connaîtrais plus le repos tant que ma vengeance ne serait pas accomplie.</p><p>Les dieux pouvaient m&#x27;abandonner. Les rois pouvaient garder leurs secrets. Mais moi, je n&#x27;oublierais pas.</p><p>Je suis Lysandre.</p><p>Lysandre le Pieux.</p></div>
-          </details>
-          <div class="card-actions">
-            <a href="https://archive.org/download/le-grimoire-de-lombre-personnages/Lysandre%20le%20Pieux.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
-          </div>
-        </article>
-        <article class="card">
-          <div>
-            <h3>Persephonix, Libre et Fiere</h3>
-            <p>Libre et Fière — ensorceleuse des flammes et des vents.</p>
-          </div>
-          <video controls preload="metadata" playsinline src="https://archive.org/download/le-grimoire-de-lombre-personnages/Persephonix%2C%20Libre%20et%20Fiere.mp4"></video>
-          <details class="story">
-            <summary>Lire son histoire</summary>
-            <div class="story-body"><p>Perséphonix</p><p>Je suis Perséphonix, fille du général Oryon, commandant de l&#x27;armée magique des Hauts Elfes.</p><p>J&#x27;ai grandi au sein d&#x27;un peuple puissant, fier de sa magie et convaincu de sa supériorité sur les autres races. Pour mes parents, les humains, les nains, les orcs et toutes les autres créatures qui peuplaient ce monde n&#x27;étaient que des êtres inférieurs, égarés dans une existence qu&#x27;ils ne comprenaient pas. À leurs yeux, ces races ne méritaient ni notre aide ni nos sacrifices. Seuls les Hauts Elfes comptaient, et seul leur avenir importait.</p><p>Depuis mon enfance, j&#x27;ai vécu sous le poids de leurs convictions. Chaque décision, chaque parole et chaque geste devaient respecter les traditions de mon peuple. Je n&#x27;avais pas le droit de remettre en question leurs enseignements, encore moins de contester leur vision du monde. À force d&#x27;obéir, j&#x27;ai fini par oublier qui j&#x27;étais réellement. Je ne savais plus si mes pensées étaient les miennes ou simplement le reflet de celles qu&#x27;on m&#x27;avait imposées.</p><p>Pourtant, au milieu de cette prison dorée, une personne m&#x27;a permis d&#x27;entrevoir un autre monde.</p><p>Elle s&#x27;appelait Erwin. C&#x27;était une humaine, mais aussi mon unique amie. Elle était esclave au service de ma famille, prisonnière d&#x27;une condition que je ne pouvais ignorer sans me mentir à moi-même. Malgré sa situation, elle possédait une liberté d&#x27;esprit que je n&#x27;avais jamais connue. Elle me parlait des terres lointaines, des peuples oubliés, des royaumes humains et des contrées où vivaient des créatures que mes parents méprisaient sans même les connaître.</p><p>À travers ses récits, j&#x27;ai découvert un monde bien plus vaste que celui que l&#x27;on m&#x27;avait appris à voir. Un monde où la bonté ne dépendait pas de la race, où le courage ne se mesurait pas à la puissance magique et où la noblesse ne se transmettait pas par le sang.</p><p>Peu à peu, une question s&#x27;est imposée à moi : si tous les peuples étaient capables du meilleur comme du pire, qu&#x27;est-ce qui rendait les Hauts Elfes supérieurs aux autres ?</p><p>Je n&#x27;ai jamais trouvé de réponse.</p><p>Et un jour, j&#x27;ai cessé de me taire.</p><p>La dispute avec mes parents fut terrible. Pour la première fois de ma vie, je leur ai tenu tête sans baisser les yeux.</p><p>— Vous ne pouvez pas continuer à vivre enfermés dans votre propre vision du monde ! leur ai-je crié. Vous prétendez connaître les autres races, mais vous refusez de les regarder autrement que comme des êtres inférieurs. Vous fermez les yeux sur leurs souffrances, leurs espoirs et leurs sacrifices. Comment pouvez-vous prétendre défendre la justice alors que vous refusez même de reconnaître leur valeur ?</p><p>Le visage de mon père se durcit. Le général Oryon, dont le seul regard suffisait à faire trembler ses soldats, se tenait devant moi comme un juge face à une traîtresse.</p><p>Ma mère, elle, me regardait avec une déception plus douloureuse encore que la colère de mon père.</p><p>À cet instant, j&#x27;ai compris que je venais de franchir une limite que je ne pourrais jamais effacer.</p><p>Ils me forcèrent alors à faire un choix.</p><p>Soit je renonçais à mes convictions, acceptais mon devoir envers ma race et restais auprès d&#x27;eux ; soit j&#x27;abandonnais mon titre, quittais les terres des Hauts Elfes et jurais de ne plus jamais y revenir.</p><p>Je savais ce que cela signifiait. En partant, je perdrais mon rang, ma famille et tout ce qui avait constitué mon existence jusqu&#x27;alors. Je deviendrais une étrangère aux yeux de mon propre peuple.</p><p>Mais je savais également qu&#x27;en restant, je finirais par devenir quelqu&#x27;un que je détesterais.</p><p>J&#x27;ai donc choisi de partir.</p><p>Non par haine envers les miens, mais parce que je refusais de croire qu&#x27;une race puisse être supérieure à une autre simplement par sa naissance. Je voulais découvrir le monde de mes propres yeux, rencontrer ceux que l&#x27;on m&#x27;avait appris à mépriser et prouver qu&#x27;une coexistence était possible.</p><p>Je voulais leur prouver qu&#x27;aucune race ne naît supérieure aux autres.</p><p>C&#x27;est ainsi que commença mon exil.</p><hr><p>Les premiers mois furent difficiles. J&#x27;ai traversé des forêts anciennes, franchi des montagnes battues par les vents et parcouru des routes où les dangers se cachaient derrière chaque ombre. J&#x27;ai appris à me méfier des sourires trop faciles, des promesses intéressées et des silences qui dissimulaient parfois plus de haine que les insultes.</p><p>Mais je n&#x27;ai pas abandonné.</p><p>Chaque soir, lorsque je trouvais refuge dans une auberge, je racontais mon histoire à ceux qui acceptaient de m&#x27;écouter. Je cherchais des compagnons, des voyageurs prêts à croire qu&#x27;un monde plus juste pouvait exister. Certains se moquaient de moi. D&#x27;autres me prenaient pour une idéaliste naïve. Quelques-uns, pourtant, semblaient touchés par mes paroles.</p><p>Je continuais d&#x27;avancer, portée par une conviction que rien ne semblait pouvoir ébranler.</p><p>Jusqu&#x27;à cette nuit-là.</p><p>Je m&#x27;étais arrêtée dans une petite auberge, à proximité d&#x27;un village dont je ne connaissais presque rien. Comme à mon habitude, je partageais mon passé avec quelques voyageurs rassemblés autour du feu. Je parlais de mon peuple, de mon départ et de mon désir de réunir les races plutôt que de les voir s&#x27;entretuer.</p><p>C&#x27;est alors qu&#x27;un vieil homme s&#x27;approcha de ma table.</p><p>Il portait une longue cape noire et une capuche qui dissimulait presque entièrement son visage. Je ne distinguais de lui que quelques traits marqués par l&#x27;âge et une étrange lueur dans le regard. Il se déplaçait avec une lenteur inhabituelle, mais quelque chose dans sa présence imposait le silence.</p><p>Il s&#x27;assit en face de moi sans demander la permission.</p><p>— Tu veux réunir les races ? murmura-t-il.</p><p>Je soutins son regard.</p><p>— Oui. Je veux prouver qu&#x27;elles peuvent vivre en paix.</p><p>Un sourire presque imperceptible se dessina sous sa capuche.</p><p>— Alors, peut-être que ce que je m&#x27;apprête à te révéler changera le destin de ce monde.</p><p>Il me parla d&#x27;une caverne, cachée non loin du village, où reposait un artefact oublié depuis des siècles. Selon lui, cet objet possédait un pouvoir capable de rétablir l&#x27;équilibre entre toutes les races. Il prétendait que les anciens peuples avaient autrefois connu une harmonie que les générations suivantes avaient détruite par leur orgueil et leur soif de domination.</p><p>Cet artefact, disait-il, était la clé pour retrouver cet équilibre perdu.</p><p>J&#x27;aurais dû me méfier. J&#x27;aurais dû lui demander comment il connaissait l&#x27;existence d&#x27;un objet aussi ancien, pourquoi personne n&#x27;en avait jamais entendu parler et ce qu&#x27;il espérait réellement obtenir en me conduisant jusqu&#x27;à lui.</p><p>Mais ses paroles avaient touché la partie de moi qui désirait désespérément croire qu&#x27;une solution existait.</p><p>Pour la première fois depuis mon départ, quelqu&#x27;un semblait partager mon espoir.</p><p>Et j&#x27;ai commis l&#x27;erreur de le croire.</p><p>À l&#x27;aube, nous quittâmes le village en direction de la caverne.</p><p>Le vieil homme avançait sans hésiter, comme s&#x27;il connaissait chaque pierre du chemin. Après plusieurs heures de marche, nous atteignîmes une ouverture dissimulée entre des parois rocheuses couvertes de mousse. Un souffle glacial s&#x27;en échappait, portant avec lui une odeur de terre humide et quelque chose de plus ancien, presque funèbre.</p><p>À l&#x27;intérieur, les ténèbres semblaient absorber la lumière de nos torches. Les parois étaient gravées de symboles que je ne reconnaissais pas. Certains représentaient des créatures enlacées, d&#x27;autres des soleils dévorés par des lunes noires. Tous semblaient raconter une histoire que le temps avait voulu effacer.</p><p>Nous avançâmes jusqu&#x27;à une salle souterraine.</p><p>Au centre reposait un livre.</p><p>Il était posé sur un piédestal de pierre noire, sans chaîne ni serrure pour le protéger. Sa couverture semblait faite d&#x27;une matière plus sombre que la nuit elle-même. Des marques sinueuses couraient sur sa surface, semblables à des veines parcourues par une énergie invisible.</p><p>Je ressentis immédiatement une présence.</p><p>Quelque chose observait mon arrivée.</p><p>— C&#x27;est lui ? demandai-je à voix basse.</p><p>Le vieil homme ne répondit pas.</p><p>Hypnotisée par l&#x27;artefact, je m&#x27;approchai. Je tendis lentement la main et posai mes doigts sur sa couverture.</p><p>À l&#x27;instant où ma peau entra en contact avec le livre, le monde disparut.</p><p>Une voix résonna directement dans mon esprit. Elle n&#x27;était ni masculine ni féminine. Elle semblait provenir de partout à la fois, comme si les profondeurs de la terre elles-mêmes s&#x27;étaient mises à parler.</p><p>« Toi qui prétends vouloir l&#x27;égalité entre les races… »</p><p>Mon souffle se bloqua.</p><p>« Tu ne récolteras que mort et désolation. Car nul être ne pourra jamais réunir ce qui fut destiné à s&#x27;opposer. L&#x27;eau et le feu. L&#x27;ombre et la lumière. La haine et l&#x27;amour. »</p><p>Des images jaillirent dans mon esprit : des royaumes en flammes, des armées s&#x27;affrontant sous des cieux obscurcis, des peuples entiers disparaissant dans des océans de sang. Au milieu de ces visions, je me vis moi-même, seule, debout devant un monde en ruines.</p><p>Puis la voix reprit, plus froide encore :</p><p>« Et pour te punir de ta crédulité, je condamne le village dont tu viens. Qu&#x27;il périsse dans les flammes, afin que tu comprennes enfin cette vérité : dans cet univers, rien n&#x27;est égal. »</p><p>Un rire lointain résonna dans les ténèbres.</p><p>Puis le silence retomba.</p><p>Je retirai brusquement ma main et tombai à genoux. Mon cœur battait si fort que j&#x27;avais l&#x27;impression qu&#x27;il allait se briser dans ma poitrine.</p><p>— Qu&#x27;est-ce que… ?</p><p>Je me retournai vers le vieil homme.</p><p>Il avait disparu.</p><p>Il n&#x27;y avait plus personne dans la caverne. Aucun bruit de pas, aucune trace de lutte, aucune autre présence. Seulement moi, le livre et les ténèbres.</p><p>Je me précipitai vers la sortie.</p><p>Lorsque j&#x27;atteignis le village, le soleil était déjà haut dans le ciel.</p><p>Mais là où se dressaient quelques heures auparavant des maisons, des échoppes et une auberge animée, il ne restait plus que des ruines calcinées. Les flammes dévoraient encore les derniers vestiges des bâtiments. Une épaisse fumée noire s&#x27;élevait vers le ciel, tandis que le vent transportait les cendres dans les rues désertes.</p><p>Je courus entre les décombres, appelant à l&#x27;aide, cherchant désespérément un survivant.</p><p>Personne ne répondit.</p><p>Le silence était insupportable.</p><p>Je m&#x27;effondrai au milieu des ruines, les mains tremblantes, incapable de comprendre ce qui venait de se produire. Était-ce réellement le livre qui avait provoqué ce massacre ? Le vieil homme était-il responsable ? Ou m&#x27;étais-je laissée entraîner dans un piège dont je ne comprenais pas encore la véritable nature ?</p><p>Je n&#x27;avais aucune réponse.</p><p>Seulement des cendres, des morts et cette voix qui continuait de résonner dans ma mémoire.</p><p>Pour la première fois, mon idéal me sembla fragile. Peut-être que le monde était réellement condamné à se déchirer. Peut-être que certaines forces existaient pour empêcher les peuples de se comprendre.</p><p>Mais lorsque je regardai les ruines, une autre pensée s&#x27;imposa à moi.</p><p>Si je renonçais maintenant, alors cette tragédie n&#x27;aurait servi qu&#x27;à prouver que la haine avait raison.</p><p>Je refusais de l&#x27;accepter.</p><p>Je me relevai lentement. Mes larmes avaient cessé de couler, mais quelque chose en moi venait de mourir. La jeune elfe qui croyait que la bonté suffisait à changer le monde n&#x27;existait plus tout à fait.</p><p>À sa place se tenait quelqu&#x27;un de différent.</p><p>Quelqu&#x27;un qui savait désormais que la paix ne serait pas offerte sans sacrifice, que la vérité pouvait être manipulée et que les monstres ne portaient pas toujours un visage reconnaissable.</p><p>Je levai les yeux vers l&#x27;horizon et serrai les poings.</p><p>— Je te retrouverai, murmurai-je à l&#x27;adresse du vieil homme disparu. Je découvrirai ce qu&#x27;est réellement ce livre, d&#x27;où vient son pouvoir et pourquoi il a choisi de me montrer ces horreurs.</p><p>Puis je prononçai un serment.</p><p>Je réunirai les races de ce monde, quelles que soient les épreuves qui m&#x27;attendent. Je détruirai cet artefact, même si je dois pour cela affronter les puissances les plus anciennes de cet univers. Et je prouverai que nul peuple n&#x27;est condamné à haïr les autres.</p><p>Je ne savais pas encore que le livre n&#x27;était peut-être pas un simple artefact.</p><p>Je ne savais pas que le vieil homme avait peut-être préparé chacune de mes décisions depuis bien avant notre rencontre.</p><p>Et je ne savais surtout pas que, dans les profondeurs de la caverne, une page venait de se tourner toute seule.</p><p>Sur le papier noir, une nouvelle ligne apparut lentement, tracée par une encre semblable à du sang :</p><p>« La porte est ouverte. Que commence le jeu de l&#x27;Équilibre. »</p><p>Ainsi débuta la véritable quête de Perséphonix.</p><p>Une quête qui ne la conduirait pas seulement à affronter les préjugés de son peuple, mais aussi à découvrir les secrets enfouis sous l&#x27;histoire des races, les mensonges des anciens et la terrible vérité qui se cachait derrière le Livre.</p></div>
-          </details>
-          <div class="card-actions">
-            <a href="https://archive.org/download/le-grimoire-de-lombre-personnages/Persephonix%2C%20Libre%20et%20Fiere.mp4" target="_blank" rel="noopener">Télécharger (.mp4)</a>
-          </div>
-        </article>
-      </div>
-    </section>
-
     <footer>
-      Le Grimoire de l'Ombre — Médias hébergés sur Internet Archive (<a href="https://archive.org/details/@retromad/" target="_blank" rel="noopener">@retromad</a>)
+      Le Grimoire de l'Ombre — Médias &amp; textes archivés sur Internet Archive (<a href="https://archive.org/details/@retromad/" target="_blank" rel="noopener">@retromad</a>)
     </footer>
   </main>
+
+  <dialog id="readerDialog" closedby="any" aria-labelledby="readerTitle">
+    <div class="reader-head">
+      <strong id="readerTitle">Liseuse</strong>
+      <div class="reader-controls">
+        <button type="button" class="btn-inline" id="fontDecBtn" aria-label="Réduire le texte">A-</button>
+        <button type="button" class="btn-inline" id="fontIncBtn" aria-label="Agrandir le texte">A+</button>
+        <button type="button" class="btn-inline" id="closeReaderBtn">Fermer</button>
+      </div>
+    </div>
+    <article class="reader-body" id="readerBody"></article>
+    <div class="reader-foot">
+      <button type="button" class="btn-inline" id="prevBookBtn">← Précédent</button>
+      <span id="readerCounter" class="mini-label"></span>
+      <button type="button" class="btn-inline" id="nextBookBtn">Suivant →</button>
+    </div>
+  </dialog>
+
+  <script>
+    const BOOKS = [{"id": "chron-01", "kind": "Chronique", "title": "Partie 1 — Les Portes du Donjon de Cristal", "html": "<p>C&#x27;est dans une cité marquée par le chaos qu&#x27;Armione, Brandir, Lagherta, Lysandre et Perséphonix se retrouvèrent réunis, chacun poussé par une même obsession : retrouver la trace du mystérieux mage noir qui avait bouleversé leurs vies.</p><p>Alors qu&#x27;ils faisaient halte devant un imposant bâtiment, un inconnu à l&#x27;allure noble, vêtu d&#x27;hermine, les interpella. Sans révéler son nom, il leur affirma qu&#x27;il les connaissait — bien qu&#x27;eux n&#x27;aient aucun souvenir de lui — et leur annonça que leurs destins étaient désormais liés. Avant de disparaître dans l&#x27;ombre, il leur lança un défi : prouver leur valeur en réussissant l&#x27;épreuve d&#x27;entrée de la Guilde des Aventuriers.</p><p>Poussés par la curiosité autant que par la nécessité, les cinq compagnons poussèrent les portes de la Guilde. Ils y furent accueillis par <strong>Bruno Gringarde</strong>, le recruteur, qui leur exposa les termes de l&#x27;épreuve : explorer et survivre au <strong>Donjon de Cristal</strong> pour gagner officiellement le titre d&#x27;aventuriers. Avant le départ, <strong>Moumoun</strong>, la forgeronne de la Guilde, prit soin de les équiper du matériel nécessaire à l&#x27;expédition. Puis Bruno Gringarde ouvrit les lourds battants menant aux profondeurs et leur lança un simple : « Bonne chance. »</p><hr><h4>L&#x27;entrée du donjon</h4><p>Dès le premier couloir, deux chemins s&#x27;offraient au groupe : une porte en bois et une porte en bronze, solidement verrouillée. Fidèle à sa réputation, <strong>Brandir</strong> ne s&#x27;embarrassa pas de subtilités et pulvérisa la porte en bois d&#x27;un grand coup de hache.</p><p>Le couloir les mena devant une première salle encombrée de trois tonneaux. Sans hésiter, le nain en réduisit deux en miettes tandis qu&#x27;<strong>Armione</strong> ouvrait prudemment le troisième… pour constater qu&#x27;il était désespérément vide.</p><p>Dans la deuxième salle, <strong>Lysandre</strong> et <strong>Lagherta</strong>, partis en éclaireurs, tombèrent nez à nez avec un gobelin. Avant même que Brandir, Armione et Perséphonix ne les rejoignent, Lysandre cribla la créature de deux flèches bien placées et l&#x27;acheva promptement.</p><h4>La pierre rouge et le silence des profondeurs</h4><p>Plus loin, une nouvelle porte en bois barra la route. Brandir voulut réitérer son exploit, mais le bois résista assez pour ébrécher sa hache. Derrière se trouvait une ancienne salle à manger, où le groupe reprit brièvement des forces en récupérant quelques vivres.</p><p>La porte du fond s&#x27;ouvrit sans difficulté sur une pièce étrange, dominée par un piédestal sur lequel reposait une <strong>pierre triangulaire rouge</strong>. Méfiants, Armione, Perséphonix et Lysandre inspectèrent minutieusement l&#x27;autel à la recherche d&#x27;un piège, sans rien déceler. Lassé d&#x27;attendre, Brandir s&#x27;empara de la pierre sans réfléchir… et, contre toute attente, rien ne se déclencha.</p><p>L&#x27;exploration se poursuivit vers une cinquième salle, plongée dans la pénombre. Brandir et Armione y surprirent une <strong>chauve-souris géante</strong> profondément endormie et choisirent sagement de battre en retraite sans un bruit. Pendant ce temps, Lysandre, Lagherta et Perséphonix découvraient une sixième pièce aménagée en bureau, où ils mirent la main sur un précieux <strong>schéma détaillant l&#x27;ouverture de la porte de bronze</strong>.</p><h4>Le sang, les flammes et l&#x27;or</h4><p>Réunis de nouveau, les cinq aventuriers pénétrèrent dans une septième salle, où deux gobelins leur tendirent une embuscade. Lysandre décocha une flèche qui blessa gravement le premier ennemi. Brandir chargea à son tour pour l&#x27;achever… mais son coup manqua sa cible et sa hache alla se planter droit dans la jambe de Lysandre !</p><p>Sans laisser le temps aux créatures de profiter de la confusion, <strong>Armione</strong> déchaîna deux boules de feu qui réduisirent les deux gobelins en cendres.</p><p>Au fond de la salle reposait un coffre poussiéreux. Échaudé, Lysandre redouta un piège — ou pire, un mimique. Brandir, fidèle à lui-même, fit sauter le loquet et y découvrit <strong>30 pièces d&#x27;or</strong>, première récompense d&#x27;une aventure qui ne faisait que commencer.</p>", "prefix": "01"}, {"id": "char-armione", "kind": "Personnage", "title": "Armione", "html": "<p>Armione, l&#x27;exilée de la Tour Blanche</p><p>Armione est une elfe d&#x27;un certain âge qui pratique la magie depuis sa plus tendre enfance. Comme tous les apprentis mages, elle vit enfermée dans la Tour Blanche, un lieu où la magie est la loi et où chaque aspect de l&#x27;existence est régi par des règles strictes.</p><p>Studieuse et assidue, Armione excelle dans son apprentissage. Pourtant, derrière cette apparente discipline se cache un profond désir de liberté. Elle rêve de quitter la tour, de découvrir le monde extérieur et de voir de ses propres yeux ce qui se passe au-delà de ses murs immaculés. Mais seuls les mages ayant achevé leur formation sont autorisés à sortir et à accomplir les missions qui leur sont confiées.</p><p>Au fil des années, cette existence cloîtrée a fait naître en elle une colère sourde. Elle obéit aux règles, suit les enseignements et maîtrise ses gestes, mais son esprit aspire à autre chose. Elle étouffe sous le poids des interdits et des attentes de ses maîtres.</p><p>Un jour, alors qu&#x27;elle étudie dans la bibliothèque de la tour, un étrange livre attire son attention. Posé parmi des ouvrages anciens, il semble l&#x27;appeler silencieusement. Incapable de détourner le regard, Armione s&#x27;en approche et tend la main vers lui.</p><p>Au moment où ses doigts effleurent la couverture, son esprit bascule. Elle sombre dans une transe profonde, coupée du monde qui l&#x27;entoure.</p><p>Lorsqu&#x27;elle reprend conscience, la bibliothèque n&#x27;est plus qu&#x27;un champ de ruines. Les rayonnages sont renversés, les livres brûlent et les flammes dévorent les précieuses collections de la tour. Plusieurs mages expérimentés l&#x27;ont maîtrisée de force, mais aucun ne semble comprendre ce qui vient de se produire.</p><p>Armione, elle-même, ne se souvient presque de rien. Elle ne ressent qu&#x27;une chose : un calme intérieur étrange, profond, presque apaisant. Pour la première fois depuis des années, la colère qui l&#x27;habite semble s&#x27;être tue.</p><p>Interrogée par les maîtres de la tour, elle raconte les quelques souvenirs qui lui restent et leur parle du livre. Les recherches commencent aussitôt. Pourtant, l&#x27;ouvrage demeure introuvable. Il semble s&#x27;être volatilisé, et même le plus sage des mages de la Tour Blanche affirme n&#x27;en avoir jamais entendu parler.</p><p>Les jours passent. La bibliothèque est reconstruite, les dégâts sont réparés et la vie reprend son cours. Aucun autre incident ne vient troubler la tranquillité de la tour.</p><p>Jusqu&#x27;au jour où, pendant un cours de magie, Armione perd à nouveau le contrôle d&#x27;elle-même.</p><p>Ses émotions, longtemps contenues, déferlent soudainement. Mais cette fois, sa magie ne se contente pas de libérer une force incontrôlable : elle agit à l&#x27;opposé de sa volonté. Les sorts de guérison deviennent mortels. Les enchantements censés protéger se retournent contre ceux qu&#x27;ils devaient préserver. Les objets s&#x27;élèvent dans les airs avant de s&#x27;écraser violemment contre les murs. Chaque tentative pour reprendre le contrôle ne fait qu&#x27;aggraver le chaos.</p><p>Les mages les plus expérimentés tentent de l&#x27;arrêter, mais leurs sorts semblent impuissants face à cette magie étrange et imprévisible.</p><p>La Tour Blanche finit par prononcer son bannissement.</p><p>Désormais livrée à elle-même, Armione n&#x27;a plus qu&#x27;un objectif : retrouver le mystérieux livre qui a bouleversé son existence. Elle est convaincue qu&#x27;il détient la clé de son pouvoir et qu&#x27;il lui permettra de reprendre le contrôle de sa magie, mais surtout de ses émotions.</p><p>Commence alors une quête qui la conduira bien au-delà des murs de la tour, dans un monde qu&#x27;elle n&#x27;a connu jusque-là qu&#x27;à travers les livres.</p><p>Un monde où elle devra découvrir que la magie n&#x27;obéit pas toujours aux règles qu&#x27;on lui a enseignées… et que certaines vérités auraient peut-être dû rester enfouies.</p>", "prefix": "armione"}, {"id": "char-brandir", "kind": "Personnage", "title": "Brandir", "html": "<p>« Un nain sans honneur est un nain déjà mort. Autant choisir qui lui fracassera le crâne. »</p><p>Je me nomme Brandir, fils de la montagne, mineur de métier et nain de naissance. Je viens du clan Karak Izor, un vieux clan nain établi dans les profondeurs des monts, là où les galeries sont aussi anciennes que les légendes et où l&#x27;or coule presque autant que la bière dans les tavernes.</p><p>J&#x27;ai longtemps mené une vie paisible. Je travaillais dans les mines, je partageais mes repas avec mes frères de clan et, chaque soir, je me rendais dans la meilleure taverne de la montagne pour y boire jusqu&#x27;à oublier les soucis de la journée. C&#x27;était une vie simple. Une vie heureuse. Une vie de nain.</p><p>Puis les elfes sont arrivés.</p><p>Une délégation de ces grandes perches aux oreilles pointues s&#x27;est présentée aux portes de notre montagne. Ils souhaitaient négocier l&#x27;achat de plusieurs pierres précieuses extraites de nos mines. Des rubis, des émeraudes et quelques diamants dont la valeur aurait suffi à acheter trois royaumes humains.</p><hr><p>Alors, je bus. Je commandai une deuxième chope. Puis une troisième. Et une quatrième.</p><p>L&#x27;homme continuait de parler. À un moment, il évoqua même les péchés des mortels et le prix de leurs faiblesses.</p><p>Je reposai ma chope avec un grand bruit.<br>— Écoute-moi bien, longue carcasse ! Si tu n&#x27;as rien d&#x27;intéressant à dire, ferme-la et laisse-moi boire !</p><p>Il ne réagit pas. Il continua simplement à me fixer sous sa capuche.</p><p>Alors, j&#x27;en eus assez. Je le saisis par le col et le repoussai brutalement.<br>— DÉGAGE !</p><p>Et soudain, le monde s&#x27;arrêta.</p><p>Le tavernier demeura figé, une chope à la main. Une goutte de bière resta suspendue dans les airs. Les flammes du foyer cessèrent de danser. Même le vent, dehors, sembla retenir son souffle. Je regardai autour de moi, la main toujours crispée sur le col de l&#x27;inconnu.</p><p>Puis j&#x27;entendis une voix. Ce n&#x27;était pas celle de l&#x27;homme. Elle semblait venir de partout à la fois, profonde et glaciale, comme si les pierres elles-mêmes s&#x27;étaient mises à parler :<br>— Brandir, fils de la montagne. Toi qui as fait de la bière ton refuge et qui as perdu ton honneur à cause de ton ivresse, écoute bien ta sentence.</p><p>Je voulus répondre, mais aucun son ne sortit de ma bouche.<br>— Puisque tu ne sais pas vivre sans boire, tu apprendras à vivre sans jamais pouvoir t&#x27;enivrer. À partir de cet instant, toute boisson alcoolisée qui franchira tes lèvres deviendra de l&#x27;eau.</p><p>Mon sang se glaça.<br>— Que chaque chope te rappelle ta faiblesse. Que chaque taverne te rappelle ta honte. Et que ta soif te poursuive jusqu&#x27;à la fin de tes jours.</p><p>La voix se tut. Le temps reprit son cours. La goutte de bière tomba. Le tavernier acheva son geste. Les flammes recommencèrent à crépiter. Et l&#x27;homme vêtu de noir avait disparu.</p><p>Je restai immobile quelques secondes, incapable de comprendre ce qui venait de se produire. Puis je saisis ma chope, la portai à mes lèvres et bus une longue gorgée.</p><p>De l&#x27;eau.</p><p>Je recrachai tout sur le comptoir.<br>— PAR LA BARBE DE MES ANCÊTRES !</p><p>Je commandai une autre chope, persuadé qu&#x27;il s&#x27;agissait d&#x27;une plaisanterie. Puis une troisième. Puis une quatrième. Toujours de l&#x27;eau. Je tentai le vin, l&#x27;hydromel et même un alcool humain si infect que j&#x27;aurais préféré boire de l&#x27;huile de lampe. Rien n&#x27;y fit. Tout devenait de l&#x27;eau.</p><p>Cette nuit-là, je compris que les dieux avaient un sens de l&#x27;humour particulièrement cruel.</p><hr><p>Depuis ce jour, je poursuis deux objectifs.</p><p>Le premier est de tuer autant de trolls que possible, jusqu&#x27;à ce que mon nom soit de nouveau prononcé avec respect dans les halls de mon clan. Je cherche les combats les plus dangereux, les créatures les plus féroces et les endroits où même les chasseurs expérimentés refusent de s&#x27;aventurer. Je n&#x27;ai plus peur de mourir. Après tout, j&#x27;ai déjà perdu ce qui comptait le plus pour un nain.</p><p>Le second objectif est de retrouver l&#x27;homme vêtu de noir. Je veux connaître son nom. Je veux savoir comment il a arrêté le temps et comment il a pu maudire un nain au point de transformer chaque boisson alcoolisée en eau. Et surtout, je veux lui faire ravaler ses paroles. Je lui arracherai sa capuche, je lui fracasserai les dents et je lui ferai regretter le jour où il a décidé de s&#x27;en prendre à Brandir Poing-de-Fer.</p><p>Car je suis un nain. Je suis têtu, rancunier et doté d&#x27;une mémoire qui ne pardonne rien.</p><p>Et si je dois parcourir le monde entier pour retrouver cet homme, alors je parcourrai le monde entier. Si je dois affronter des dragons, je les affronterai. Si je dois traverser les terres des elfes, je traverserai ces terres, même si cela me coûte mes dernières dents. Et si je dois mourir pour accomplir ma vengeance, alors je mourrai la hache à la main.</p><p>Mais je vous le garantis sur mon honneur, celui qu&#x27;il me reste : le jour où je retrouverai cet homme vêtu de noir, il regrettera d&#x27;avoir transformé ma bière en eau.</p><p>Car on peut enlever son or à un nain. On peut lui prendre sa maison, sa hache ou même sa barbe. Mais lui enlever sa bière ? C&#x27;est déclarer la guerre à toute une montagne.</p><p>Et moi, je suis Brandir le Pourfendeur de Crâne. Que les trolls tremblent, que les elfes se méfient et que cet homme prie pour ne jamais croiser ma route. Car ma vengeance sera froide. Très froide. Aussi froide que l&#x27;eau que je suis désormais condamné à boire.</p>", "prefix": "brandir"}, {"id": "char-lagherta", "kind": "Personnage", "title": "Lagherta", "html": "<p>Lagherta — Celle qui répare les âmes</p><p>Lagherta est une âme condamnée à se réincarner encore et encore par la volonté d&#x27;un artefact ancien. À chaque nouvelle vie, elle perd tous ses souvenirs liés à cet artefact, oubliant jusqu&#x27;à son existence et le mal qu&#x27;il lui a infligé.</p><p>Pourtant, quelque chose demeure au plus profond d&#x27;elle.</p><p>Dans chacune de ses incarnations, Lagherta ressent une attirance inexplicable envers les personnes dont l&#x27;âme a été blessée par ce même artefact. Elle ne sait ni pourquoi elle les reconnaît, ni pourquoi leur douleur résonne si profondément en elle. Elle ne comprend pas pourquoi elle ressent le besoin de les aider à se reconstruire, à retrouver leur identité et à recoller les fragments de leur âme brisée.</p>", "prefix": "lagherta"}, {"id": "char-lysandre", "kind": "Personnage", "title": "Lysandre", "html": "<p>Je m&#x27;appelle Lysandre… Lysandre le Pieux.</p><p>Certains pensent que c&#x27;est une moquerie, d&#x27;autres y voient une marque de foi. Ils ont tous les deux raison. Ma foi ne va ni aux dieux ni aux rois, mais à la promesse que j&#x27;ai faite aux miens, sous les cendres de ma ferme.</p><p>Je viens de Bretonnie. Dans ma jeunesse, j&#x27;étais un noble, mais certainement pas le genre de noble que l&#x27;on présente volontiers dans les grandes réceptions. J&#x27;étais trop curieux, trop fouineur et incapable de résister à l&#x27;envie de mettre mon nez là où il ne fallait pas.</p><p>J&#x27;avais une véritable passion pour les bagues et les colliers, enchantés ou non. Je les collectionnais avec l&#x27;avidité d&#x27;une pie, cet oiseau voleur qui ne peut s&#x27;empêcher de s&#x27;emparer de tout ce qui brille. Chaque bijou avait son histoire, et je prenais un plaisir immense à découvrir leur provenance.</p><p>Mais ma curiosité allait bien au-delà des bijoux.</p><p>À l&#x27;âge de quinze ans, alors que je fouillais une pièce à laquelle je n&#x27;avais évidemment aucune autorisation d&#x27;accéder, je surpris une conversation entre plusieurs personnages haut placés. Une discussion dont je n&#x27;aurais jamais dû entendre le moindre mot.</p><p>Malheureusement, ils me repérèrent.</p><p>Ce que j&#x27;avais entendu était suffisamment grave pour que l&#x27;on décide de m&#x27;emprisonner. Mes parents tentèrent de me défendre, mais ils comprirent rapidement que ma situation était sans issue. Ils me supplièrent alors de fuir, de partir loin et de ne jamais revenir.</p><p>Je leur obéis.</p><p>Ce fut la dernière fois que je les vis vivants.</p><p>Peu après mon départ, mes parents furent exécutés.</p><p>Je n&#x27;avais plus de titre, plus de maison et plus de famille. Je dus alors me cacher parmi les paysans les plus misérables et les gens les moins recommandables du royaume. Pendant plusieurs années, je n&#x27;eus qu&#x27;un seul objectif : survivre.</p><p>J&#x27;appris à me cacher, à rester discret, à voler lorsque la faim devenait trop forte et à mendier lorsque je n&#x27;avais plus rien. Je côtoyais des voleurs, des escrocs et toutes sortes de crapules. Pourtant, malgré cette existence, je conservais une certaine limite : je refusais de tuer pour gagner de l&#x27;argent.</p><p>Avec le temps, je découvris un moyen plus intéressant de remplir ma bourse : livrer les meurtriers et les voleurs à la justice contre quelques pièces. Après tout, pourquoi risquer ma peau à commettre des crimes quand je pouvais gagner de l&#x27;argent en attrapant ceux qui les commettaient ?</p><p>Et puis, je dois bien l&#x27;avouer, j&#x27;avais pris une petite habitude.</p><p>À chaque prise, je m&#x27;autorisais à conserver une bague ou un collier appartenant à ma capture. Un petit souvenir, comme je disais. Une manière de me constituer une collection tout en gagnant honnêtement ma vie… du moins, selon ma propre définition de l&#x27;honnêteté.</p><p>Les années passèrent ainsi, jusqu&#x27;au jour où mon existence bascula une nouvelle fois.</p><p>J&#x27;étais dans une taverne, en train de me vanter de ma dernière prise auprès de quelques habitués. Je racontais comment j&#x27;avais réussi à livrer un voleur particulièrement rusé à la justice, tout en leur montrant fièrement le bijou que j&#x27;avais conservé en souvenir.</p><p>C&#x27;est alors qu&#x27;un homme vêtu de noir vint m&#x27;aborder.</p><p>Il semblait intéressé par mon travail. Il me posa quelques questions sur mes captures, sur mes méthodes et sur les petits souvenirs que je conservais après chacune d&#x27;elles.</p><p>Je trouvais cet homme étrange, mais après tout, j&#x27;avais l&#x27;habitude de côtoyer des individus peu ordinaires.</p><p>Lorsque je décidai finalement de prendre congé, quelque chose d&#x27;impossible se produisit.</p><p>Le temps s&#x27;arrêta.</p><p>Les conversations cessèrent. Les flammes des bougies se figèrent. Les chopes restèrent suspendues dans les airs. Plus rien ne bougeait.</p><p>Puis une voix résonna dans mon esprit.</p><p>Ce n&#x27;était pas celle de l&#x27;homme en noir.</p><p>« Toi qui chasses tes semblables pour quelques pièces… Toi qui les livres à leurs bourreaux et vas même jusqu&#x27;à leur voler leurs possessions pour enrichir ta collection… Je vais te montrer ce qu&#x27;est le véritable désespoir. »</p><p>Des images envahirent mon esprit.</p><p>Des guerres sans fin, des villages réduits en cendres, des hommes massacrés, des cris, du sang et des champs ravagés par le chaos. Je voyais des familles déchirées, des innocents périr et des royaumes entiers sombrer dans la destruction.</p><p>Puis la voix reprit :</p><p>« Et pour terminer… je vais te le faire ressentir. »</p><p>Soudain, le temps reprit son cours.</p><p>Je ne pris pas le temps de comprendre ce qui venait de se passer. Je quittai la taverne et me précipitai chez moi, avec un mauvais pressentiment qui me nouait l&#x27;estomac.</p><p>Mais lorsque j&#x27;arrivai…</p><p>Je tombai à genoux.</p><p>Ma maison brûlait.</p><p>Les flammes dévoraient ma ferme et ma famille était prisonnière de l&#x27;incendie. Je voulais courir vers eux, les sauver, faire quelque chose… n&#x27;importe quoi !</p><p>Mais je ne pouvais rien faire.</p><p>Je ne pouvais que regarder mon monde disparaître sous mes yeux.</p><p>Tout ce que j&#x27;avais construit, tout ce que j&#x27;avais réussi à retrouver après des années de misère, venait de m&#x27;être arraché.</p><p>Alors, au milieu des flammes et des cendres encore fumantes, je fis un serment.</p><p>Je jurai sur les restes de ma famille et de ma maison que je retrouverais cet homme en noir. Je retrouverais cette voix et ce livre dont elle semblait provenir. Et je les détruirais.</p><p>Je ne connaîtrais plus le repos tant que ma vengeance ne serait pas accomplie.</p><p>Les dieux pouvaient m&#x27;abandonner. Les rois pouvaient garder leurs secrets. Mais moi, je n&#x27;oublierais pas.</p><p>Je suis Lysandre.</p><p>Lysandre le Pieux.</p>", "prefix": "lysandre"}, {"id": "char-persephonix", "kind": "Personnage", "title": "Perséphonix", "html": "<p>Perséphonix</p><p>Je suis Perséphonix, fille du général Oryon, commandant de l&#x27;armée magique des Hauts Elfes.</p><p>J&#x27;ai grandi au sein d&#x27;un peuple puissant, fier de sa magie et convaincu de sa supériorité sur les autres races. Pour mes parents, les humains, les nains, les orcs et toutes les autres créatures qui peuplaient ce monde n&#x27;étaient que des êtres inférieurs, égarés dans une existence qu&#x27;ils ne comprenaient pas. À leurs yeux, ces races ne méritaient ni notre aide ni nos sacrifices. Seuls les Hauts Elfes comptaient, et seul leur avenir importait.</p><p>Depuis mon enfance, j&#x27;ai vécu sous le poids de leurs convictions. Chaque décision, chaque parole et chaque geste devaient respecter les traditions de mon peuple. Je n&#x27;avais pas le droit de remettre en question leurs enseignements, encore moins de contester leur vision du monde. À force d&#x27;obéir, j&#x27;ai fini par oublier qui j&#x27;étais réellement. Je ne savais plus si mes pensées étaient les miennes ou simplement le reflet de celles qu&#x27;on m&#x27;avait imposées.</p><p>Pourtant, au milieu de cette prison dorée, une personne m&#x27;a permis d&#x27;entrevoir un autre monde.</p><p>Elle s&#x27;appelait Erwin. C&#x27;était une humaine, mais aussi mon unique amie. Elle était esclave au service de ma famille, prisonnière d&#x27;une condition que je ne pouvais ignorer sans me mentir à moi-même. Malgré sa situation, elle possédait une liberté d&#x27;esprit que je n&#x27;avais jamais connue. Elle me parlait des terres lointaines, des peuples oubliés, des royaumes humains et des contrées où vivaient des créatures que mes parents méprisaient sans même les connaître.</p><p>À travers ses récits, j&#x27;ai découvert un monde bien plus vaste que celui que l&#x27;on m&#x27;avait appris à voir. Un monde où la bonté ne dépendait pas de la race, où le courage ne se mesurait pas à la puissance magique et où la noblesse ne se transmettait pas par le sang.</p><p>Peu à peu, une question s&#x27;est imposée à moi : si tous les peuples étaient capables du meilleur comme du pire, qu&#x27;est-ce qui rendait les Hauts Elfes supérieurs aux autres ?</p><p>Je n&#x27;ai jamais trouvé de réponse.</p><p>Et un jour, j&#x27;ai cessé de me taire.</p><p>La dispute avec mes parents fut terrible. Pour la première fois de ma vie, je leur ai tenu tête sans baisser les yeux.</p><p>— Vous ne pouvez pas continuer à vivre enfermés dans votre propre vision du monde ! leur ai-je crié. Vous prétendez connaître les autres races, mais vous refusez de les regarder autrement que comme des êtres inférieurs. Vous fermez les yeux sur leurs souffrances, leurs espoirs et leurs sacrifices. Comment pouvez-vous prétendre défendre la justice alors que vous refusez même de reconnaître leur valeur ?</p><p>Le visage de mon père se durcit. Le général Oryon, dont le seul regard suffisait à faire trembler ses soldats, se tenait devant moi comme un juge face à une traîtresse.</p><p>Ma mère, elle, me regardait avec une déception plus douloureuse encore que la colère de mon père.</p><p>À cet instant, j&#x27;ai compris que je venais de franchir une limite que je ne pourrais jamais effacer.</p><p>Ils me forcèrent alors à faire un choix.</p><p>Soit je renonçais à mes convictions, acceptais mon devoir envers ma race et restais auprès d&#x27;eux ; soit j&#x27;abandonnais mon titre, quittais les terres des Hauts Elfes et jurais de ne plus jamais y revenir.</p><p>Je savais ce que cela signifiait. En partant, je perdrais mon rang, ma famille et tout ce qui avait constitué mon existence jusqu&#x27;alors. Je deviendrais une étrangère aux yeux de mon propre peuple.</p><p>Mais je savais également qu&#x27;en restant, je finirais par devenir quelqu&#x27;un que je détesterais.</p><p>J&#x27;ai donc choisi de partir.</p><p>Non par haine envers les miens, mais parce que je refusais de croire qu&#x27;une race puisse être supérieure à une autre simplement par sa naissance. Je voulais découvrir le monde de mes propres yeux, rencontrer ceux que l&#x27;on m&#x27;avait appris à mépriser et prouver qu&#x27;une coexistence était possible.</p><p>Je voulais leur prouver qu&#x27;aucune race ne naît supérieure aux autres.</p><p>C&#x27;est ainsi que commença mon exil.</p><hr><p>Les premiers mois furent difficiles. J&#x27;ai traversé des forêts anciennes, franchi des montagnes battues par les vents et parcouru des routes où les dangers se cachaient derrière chaque ombre. J&#x27;ai appris à me méfier des sourires trop faciles, des promesses intéressées et des silences qui dissimulaient parfois plus de haine que les insultes.</p><p>Mais je n&#x27;ai pas abandonné.</p><p>Chaque soir, lorsque je trouvais refuge dans une auberge, je racontais mon histoire à ceux qui acceptaient de m&#x27;écouter. Je cherchais des compagnons, des voyageurs prêts à croire qu&#x27;un monde plus juste pouvait exister. Certains se moquaient de moi. D&#x27;autres me prenaient pour une idéaliste naïve. Quelques-uns, pourtant, semblaient touchés par mes paroles.</p><p>Je continuais d&#x27;avancer, portée par une conviction que rien ne semblait pouvoir ébranler.</p><p>Jusqu&#x27;à cette nuit-là.</p><p>Je m&#x27;étais arrêtée dans une petite auberge, à proximité d&#x27;un village dont je ne connaissais presque rien. Comme à mon habitude, je partageais mon passé avec quelques voyageurs rassemblés autour du feu. Je parlais de mon peuple, de mon départ et de mon désir de réunir les races plutôt que de les voir s&#x27;entretuer.</p><p>C&#x27;est alors qu&#x27;un vieil homme s&#x27;approcha de ma table.</p><p>Il portait une longue cape noire et une capuche qui dissimulait presque entièrement son visage. Je ne distinguais de lui que quelques traits marqués par l&#x27;âge et une étrange lueur dans le regard. Il se déplaçait avec une lenteur inhabituelle, mais quelque chose dans sa présence imposait le silence.</p><p>Il s&#x27;assit en face de moi sans demander la permission.</p><p>— Tu veux réunir les races ? murmura-t-il.</p><p>Je soutins son regard.</p><p>— Oui. Je veux prouver qu&#x27;elles peuvent vivre en paix.</p><p>Un sourire presque imperceptible se dessina sous sa capuche.</p><p>— Alors, peut-être que ce que je m&#x27;apprête à te révéler changera le destin de ce monde.</p><p>Il me parla d&#x27;une caverne, cachée non loin du village, où reposait un artefact oublié depuis des siècles. Selon lui, cet objet possédait un pouvoir capable de rétablir l&#x27;équilibre entre toutes les races. Il prétendait que les anciens peuples avaient autrefois connu une harmonie que les générations suivantes avaient détruite par leur orgueil et leur soif de domination.</p><p>Cet artefact, disait-il, était la clé pour retrouver cet équilibre perdu.</p><p>J&#x27;aurais dû me méfier. J&#x27;aurais dû lui demander comment il connaissait l&#x27;existence d&#x27;un objet aussi ancien, pourquoi personne n&#x27;en avait jamais entendu parler et ce qu&#x27;il espérait réellement obtenir en me conduisant jusqu&#x27;à lui.</p><p>Mais ses paroles avaient touché la partie de moi qui désirait désespérément croire qu&#x27;une solution existait.</p><p>Pour la première fois depuis mon départ, quelqu&#x27;un semblait partager mon espoir.</p><p>Et j&#x27;ai commis l&#x27;erreur de le croire.</p><p>À l&#x27;aube, nous quittâmes le village en direction de la caverne.</p><p>Le vieil homme avançait sans hésiter, comme s&#x27;il connaissait chaque pierre du chemin. Après plusieurs heures de marche, nous atteignîmes une ouverture dissimulée entre des parois rocheuses couvertes de mousse. Un souffle glacial s&#x27;en échappait, portant avec lui une odeur de terre humide et quelque chose de plus ancien, presque funèbre.</p><p>À l&#x27;intérieur, les ténèbres semblaient absorber la lumière de nos torches. Les parois étaient gravées de symboles que je ne reconnaissais pas. Certains représentaient des créatures enlacées, d&#x27;autres des soleils dévorés par des lunes noires. Tous semblaient raconter une histoire que le temps avait voulu effacer.</p><p>Nous avançâmes jusqu&#x27;à une salle souterraine.</p><p>Au centre reposait un livre.</p><p>Il était posé sur un piédestal de pierre noire, sans chaîne ni serrure pour le protéger. Sa couverture semblait faite d&#x27;une matière plus sombre que la nuit elle-même. Des marques sinueuses couraient sur sa surface, semblables à des veines parcourues par une énergie invisible.</p><p>Je ressentis immédiatement une présence.</p><p>Quelque chose observait mon arrivée.</p><p>— C&#x27;est lui ? demandai-je à voix basse.</p><p>Le vieil homme ne répondit pas.</p><p>Hypnotisée par l&#x27;artefact, je m&#x27;approchai. Je tendis lentement la main et posai mes doigts sur sa couverture.</p><p>À l&#x27;instant où ma peau entra en contact avec le livre, le monde disparut.</p><p>Une voix résonna directement dans mon esprit. Elle n&#x27;était ni masculine ni féminine. Elle semblait provenir de partout à la fois, comme si les profondeurs de la terre elles-mêmes s&#x27;étaient mises à parler.</p><p>« Toi qui prétends vouloir l&#x27;égalité entre les races… »</p><p>Mon souffle se bloqua.</p><p>« Tu ne récolteras que mort et désolation. Car nul être ne pourra jamais réunir ce qui fut destiné à s&#x27;opposer. L&#x27;eau et le feu. L&#x27;ombre et la lumière. La haine et l&#x27;amour. »</p><p>Des images jaillirent dans mon esprit : des royaumes en flammes, des armées s&#x27;affrontant sous des cieux obscurcis, des peuples entiers disparaissant dans des océans de sang. Au milieu de ces visions, je me vis moi-même, seule, debout devant un monde en ruines.</p><p>Puis la voix reprit, plus froide encore :</p><p>« Et pour te punir de ta crédulité, je condamne le village dont tu viens. Qu&#x27;il périsse dans les flammes, afin que tu comprennes enfin cette vérité : dans cet univers, rien n&#x27;est égal. »</p><p>Un rire lointain résonna dans les ténèbres.</p><p>Puis le silence retomba.</p><p>Je retirai brusquement ma main et tombai à genoux. Mon cœur battait si fort que j&#x27;avais l&#x27;impression qu&#x27;il allait se briser dans ma poitrine.</p><p>— Qu&#x27;est-ce que… ?</p><p>Je me retournai vers le vieil homme.</p><p>Il avait disparu.</p><p>Il n&#x27;y avait plus personne dans la caverne. Aucun bruit de pas, aucune trace de lutte, aucune autre présence. Seulement moi, le livre et les ténèbres.</p><p>Je me précipitai vers la sortie.</p><p>Lorsque j&#x27;atteignis le village, le soleil était déjà haut dans le ciel.</p><p>Mais là où se dressaient quelques heures auparavant des maisons, des échoppes et une auberge animée, il ne restait plus que des ruines calcinées. Les flammes dévoraient encore les derniers vestiges des bâtiments. Une épaisse fumée noire s&#x27;élevait vers le ciel, tandis que le vent transportait les cendres dans les rues désertes.</p><p>Je courus entre les décombres, appelant à l&#x27;aide, cherchant désespérément un survivant.</p><p>Personne ne répondit.</p><p>Le silence était insupportable.</p><p>Je m&#x27;effondrai au milieu des ruines, les mains tremblantes, incapable de comprendre ce qui venait de se produire. Était-ce réellement le livre qui avait provoqué ce massacre ? Le vieil homme était-il responsable ? Ou m&#x27;étais-je laissée entraîner dans un piège dont je ne comprenais pas encore la véritable nature ?</p><p>Je n&#x27;avais aucune réponse.</p><p>Seulement des cendres, des morts et cette voix qui continuait de résonner dans ma mémoire.</p><p>Pour la première fois, mon idéal me sembla fragile. Peut-être que le monde était réellement condamné à se déchirer. Peut-être que certaines forces existaient pour empêcher les peuples de se comprendre.</p><p>Mais lorsque je regardai les ruines, une autre pensée s&#x27;imposa à moi.</p><p>Si je renonçais maintenant, alors cette tragédie n&#x27;aurait servi qu&#x27;à prouver que la haine avait raison.</p><p>Je refusais de l&#x27;accepter.</p><p>Je me relevai lentement. Mes larmes avaient cessé de couler, mais quelque chose en moi venait de mourir. La jeune elfe qui croyait que la bonté suffisait à changer le monde n&#x27;existait plus tout à fait.</p><p>À sa place se tenait quelqu&#x27;un de différent.</p><p>Quelqu&#x27;un qui savait désormais que la paix ne serait pas offerte sans sacrifice, que la vérité pouvait être manipulée et que les monstres ne portaient pas toujours un visage reconnaissable.</p><p>Je levai les yeux vers l&#x27;horizon et serrai les poings.</p><p>— Je te retrouverai, murmurai-je à l&#x27;adresse du vieil homme disparu. Je découvrirai ce qu&#x27;est réellement ce livre, d&#x27;où vient son pouvoir et pourquoi il a choisi de me montrer ces horreurs.</p><p>Puis je prononçai un serment.</p><p>Je réunirai les races de ce monde, quelles que soient les épreuves qui m&#x27;attendent. Je détruirai cet artefact, même si je dois pour cela affronter les puissances les plus anciennes de cet univers. Et je prouverai que nul peuple n&#x27;est condamné à haïr les autres.</p><p>Je ne savais pas encore que le livre n&#x27;était peut-être pas un simple artefact.</p><p>Je ne savais pas que le vieil homme avait peut-être préparé chacune de mes décisions depuis bien avant notre rencontre.</p><p>Et je ne savais surtout pas que, dans les profondeurs de la caverne, une page venait de se tourner toute seule.</p><p>Sur le papier noir, une nouvelle ligne apparut lentement, tracée par une encre semblable à du sang :</p><p>« La porte est ouverte. Que commence le jeu de l&#x27;Équilibre. »</p><p>Ainsi débuta la véritable quête de Perséphonix.</p><p>Une quête qui ne la conduirait pas seulement à affronter les préjugés de son peuple, mais aussi à découvrir les secrets enfouis sous l&#x27;histoire des races, les mensonges des anciens et la terrible vérité qui se cachait derrière le Livre.</p>", "prefix": "persephonix"}];
+    const TRACKS = [{"title": "01 - Le Donjon de Cristal", "url": "https://archive.org/download/le-grimoire-de-lombre-audios/01%20-%20Le%20Donjon%20de%20Cristal.mp3"}, {"title": "02 - Le Donjon de Cristal", "url": "https://archive.org/download/le-grimoire-de-lombre-audios/02%20-%20Le%20Donjon%20de%20Cristal.mp3"}, {"title": "03 - La Compagnie Avance", "url": "https://archive.org/download/le-grimoire-de-lombre-audios/03%20-%20La%20Compagnie%20Avance.mp3"}, {"title": "04 - Le Grimoire des Ombres", "url": "https://archive.org/download/le-grimoire-de-lombre-audios/04%20-%20Le%20Grimoire%20des%20Ombres.mp3"}];
+
+    // Onglets accessibles
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.tabpanel');
+    tabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach((b) => b.setAttribute('aria-selected', 'false'));
+        panels.forEach((p) => p.hidden = true);
+        btn.setAttribute('aria-selected', 'true');
+        document.getElementById(btn.getAttribute('aria-controls')).hidden = false;
+      });
+    });
+
+    // Liseuse (Dialog modal)
+    const dialog = document.getElementById('readerDialog');
+    const readerTitle = document.getElementById('readerTitle');
+    const readerBody = document.getElementById('readerBody');
+    const readerCounter = document.getElementById('readerCounter');
+    const prevBtn = document.getElementById('prevBookBtn');
+    const nextBtn = document.getElementById('nextBookBtn');
+    let currentBookIdx = 0;
+    let fontSize = 1.08;
+
+    function renderBook(idx) {
+      if (!BOOKS.length) return;
+      currentBookIdx = (idx + BOOKS.length) % BOOKS.length;
+      const b = BOOKS[currentBookIdx];
+      readerTitle.textContent = `${b.kind} — ${b.title}`;
+      readerBody.innerHTML = b.html;
+      readerBody.scrollTop = 0;
+      dialog.scrollTop = 0;
+      readerCounter.textContent = `${currentBookIdx + 1} / ${BOOKS.length}`;
+    }
+
+    function openBookById(id) {
+      const idx = BOOKS.findIndex((b) => b.id === id);
+      renderBook(idx >= 0 ? idx : 0);
+      dialog.showModal();
+    }
+
+    document.getElementById('openGrimoireBtn').addEventListener('click', () => openBookById(BOOKS[0]?.id));
+    document.querySelectorAll('[data-open-book]').forEach((btn) => {
+      btn.addEventListener('click', () => openBookById(btn.dataset.openBook));
+    });
+    document.getElementById('closeReaderBtn').addEventListener('click', () => dialog.close());
+    prevBtn.addEventListener('click', () => renderBook(currentBookIdx - 1));
+    nextBtn.addEventListener('click', () => renderBook(currentBookIdx + 1));
+
+    document.getElementById('fontIncBtn').addEventListener('click', () => {
+      fontSize = Math.min(1.5, +(fontSize + 0.1).toFixed(2));
+      readerBody.style.setProperty('--reader-size', `${fontSize}rem`);
+    });
+    document.getElementById('fontDecBtn').addEventListener('click', () => {
+      fontSize = Math.max(0.85, +(fontSize - 0.1).toFixed(2));
+      readerBody.style.setProperty('--reader-size', `${fontSize}rem`);
+    });
+
+    // Fallback light-dismiss pour Safari sans closedby
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      dialog.addEventListener('click', (event) => {
+        if (event.target !== dialog) return;
+        const rect = dialog.getBoundingClientRect();
+        const inside = (
+          rect.top <= event.clientY && event.clientY <= rect.top + rect.height &&
+          rect.left <= event.clientX && event.clientX <= rect.left + rect.width
+        );
+        if (!inside) dialog.close();
+      });
+    }
+
+    // Playlist audio continue
+    const playlistPlayer = document.getElementById('playlistPlayer');
+    const playlistNow = document.getElementById('playlistNow');
+    let currentTrackIdx = 0;
+
+    function playTrack(idx) {
+      if (!TRACKS.length) return;
+      currentTrackIdx = idx % TRACKS.length;
+      const t = TRACKS[currentTrackIdx];
+      playlistPlayer.src = t.url;
+      playlistNow.textContent = `Lecture : ${t.title} (${currentTrackIdx + 1}/${TRACKS.length})`;
+      playlistPlayer.play().catch(() => {});
+    }
+
+    document.getElementById('playAllBtn').addEventListener('click', () => playTrack(0));
+    document.querySelectorAll('[data-play-track]').forEach((btn) => {
+      btn.addEventListener('click', () => playTrack(Number(btn.dataset.playTrack)));
+    });
+    playlistPlayer.addEventListener('ended', () => {
+      if (currentTrackIdx + 1 < TRACKS.length) {
+        playTrack(currentTrackIdx + 1);
+      }
+    });
+  </script>
 </body>
 </html>

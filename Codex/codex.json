@@ -1,0 +1,68 @@
+{
+  "pnj": [
+    {
+      "nom": "Bruno Gringarde",
+      "role": "Recruteur de la Guilde des Aventuriers",
+      "note": "A confié l'épreuve du Donjon de Cristal au groupe et ouvert les portes du donjon."
+    },
+    {
+      "nom": "Moumoun",
+      "role": "Forgeronne de la Guilde",
+      "note": "A fourni l'équipement nécessaire au groupe avant leur départ dans le Donjon de Cristal."
+    },
+    {
+      "nom": "L'Homme à l'Hermine",
+      "role": "Inconnu mystérieux",
+      "note": "A interpellé le groupe en ville, affirmant qu'il les connaissait et que leurs destins étaient liés."
+    },
+    {
+      "nom": "L'Homme en Noir / Mage Noir",
+      "role": "Antagoniste",
+      "note": "Lié au Grimoire, à la malédiction de Brandir (eau à la place de la bière), au drame de Lysandre et au village calciné de Perséphonix."
+    }
+  ],
+  "lieux": [
+    {
+      "nom": "Le Donjon de Cristal",
+      "note": "Épreuve d'entrée de la Guilde. Contient une porte de bronze verrouillée, une chauve-souris géante endormie, un bureau et des gobelins."
+    },
+    {
+      "nom": "La Guilde des Aventuriers",
+      "note": "Lieu de recrutement où le groupe a rencontré Bruno Gringarde et Moumoun."
+    },
+    {
+      "nom": "La Tour Blanche",
+      "note": "Ancienne école de magie d'Armione, d'où elle a été bannie après la destruction de la bibliothèque."
+    }
+  ],
+  "objets": [
+    {
+      "nom": "Le Grimoire de l'Ombre",
+      "note": "Artefact ancien au cœur de l'aventure — lié à la perte de mémoire de Lagherta, aux visions de Perséphonix et à l'exil d'Armione."
+    },
+    {
+      "nom": "Pierre triangulaire rouge",
+      "note": "Trouvée sur un piédestal dans le Donjon de Cristal et prise par Brandir sans déclencher de piège."
+    },
+    {
+      "nom": "Schéma de la porte de bronze",
+      "note": "Trouvé dans le bureau (6e salle) par Lysandre, Lagherta et Perséphonix."
+    },
+    {
+      "nom": "Bourse du groupe : 30 pièces d'or",
+      "note": "Trouvées dans le coffre de la 7e salle du Donjon de Cristal."
+    }
+  ],
+  "quetes": [
+    {
+      "nom": "Devenir Aventuriers de la Guilde",
+      "statut": "En cours",
+      "note": "Terminer l'exploration du Donjon de Cristal et ouvrir la porte de bronze."
+    },
+    {
+      "nom": "Retrouver l'Homme en Noir & le Grimoire",
+      "statut": "En cours",
+      "note": "Quête commune liée au passé de Brandir, Lysandre, Armione, Perséphonix et Lagherta."
+    }
+  ]
+}
