@@ -84,6 +84,41 @@ def char_note_for(filename: str) -> str:
     return "Vidéo de présentation du personnage."
 
 
+def load_story_html(filename: str) -> str:
+    stories_dir = os.path.join(ROOT, "Histoires")
+    if not os.path.isdir(stories_dir):
+        return ""
+    matched_path = None
+    for prefix in CHARACTER_NOTES:
+        if filename.lower().startswith(prefix.lower()):
+            candidate = os.path.join(stories_dir, f"{prefix}.txt")
+            if os.path.isfile(candidate):
+                matched_path = candidate
+                break
+    if not matched_path:
+        return ""
+    with open(matched_path, encoding="utf-8") as fh:
+        raw = fh.read().strip()
+    if not raw:
+        return ""
+    blocks = []
+    for chunk in raw.split("\n\n"):
+        chunk = chunk.strip()
+        if not chunk:
+            continue
+        if chunk == "---":
+            blocks.append("<hr>")
+        else:
+            escaped = html.escape(chunk).replace("\n", "<br>")
+            blocks.append(f"<p>{escaped}</p>")
+    return (
+        '          <details class="story">\n'
+        "            <summary>Lire son histoire</summary>\n"
+        f'            <div class="story-body">{"".join(blocks)}</div>\n'
+        "          </details>"
+    )
+
+
 def build_index(episodes: list[str], audios: list[str], characters: list[str]) -> None:
     ep_cards = []
     for f in episodes:
@@ -123,6 +158,7 @@ def build_index(episodes: list[str], audios: list[str], characters: list[str]) -
     for f in characters:
         title = html.escape(os.path.splitext(f)[0])
         note = html.escape(char_note_for(f))
+        story_html = load_story_html(f)
         url = archive_url(ITEMS["personnages"]["identifier"], f)
         char_cards.append(
             f"""        <article class="card">
@@ -131,6 +167,7 @@ def build_index(episodes: list[str], audios: list[str], characters: list[str]) -
             <p>{note}</p>
           </div>
           <video controls preload="metadata" playsinline src="{url}"></video>
+{story_html}
           <div class="card-actions">
             <a href="{url}" target="_blank" rel="noopener">Télécharger (.mp4)</a>
           </div>
@@ -356,6 +393,39 @@ def build_index(episodes: list[str], audios: list[str], characters: list[str]) -
 
     .card-actions a:hover {{ text-decoration: underline; }}
 
+    details.story {{
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.55rem 0.75rem;
+      background: var(--bg);
+    }}
+
+    details.story summary {{
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--accent);
+    }}
+
+    .story-body {{
+      margin-top: 0.65rem;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 0.35rem;
+      font-size: 0.9rem;
+    }}
+
+    .story-body p {{
+      color: var(--text);
+      margin: 0 0 0.65rem;
+    }}
+
+    .story-body hr {{
+      border: 0;
+      border-top: 1px solid var(--border);
+      margin: 0.75rem 0;
+    }}
+
     footer {{
       text-align: center;
       color: var(--muted);
@@ -438,7 +508,7 @@ def git_push_if_repo() -> None:
     if not status.stdout.strip():
         print("Aucun changement Git à publier.")
         return
-    subprocess.run(["git", "-C", ROOT, "add", "index.html", "Affiche - Le Grimoire de l'Ombre.jpg", "sync_archive.py", "Lancer_Sync_Archive.bat", ".gitignore"], check=False)
+    subprocess.run(["git", "-C", ROOT, "add", "index.html", "Affiche - Le Grimoire de l'Ombre.jpg", "sync_archive.py", "Lancer_Sync_Archive.bat", ".gitignore", "Histoires"], check=False)
     subprocess.run(["git", "-C", ROOT, "commit", "-m", "Mise a jour archive Le Grimoire de l'Ombre"], check=False)
     subprocess.run(["git", "-C", ROOT, "push"], check=False)
     print("Site web mis à jour sur GitHub Pages !")
